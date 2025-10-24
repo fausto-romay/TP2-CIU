@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { UserContext } from "../context/userContext";
+import { getUserByNickName } from "../services/userService";
 
 function LoginPage() {
     const [nickName, setNickName] = useState("");
@@ -8,94 +9,68 @@ function LoginPage() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
+    const { setUser } = useContext(UserContext);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
 
         try {
-            if (password != "123456") {
+            const users = await getUserByNickName(nickName);
+
+            if (!users || users.length === 0) {
+                setError("Usuario no encontrado");
+                return;
+            }
+
+            if (password !== "123456") {
                 setError("Contraseña incorrecta");
                 return;
             }
 
-            // Lama a la API del backend para verificar si el usuario existe:
-            const res = await axios.get(`http://localhost:3000/users?nickName=${nickName}`);
-            const users = res.data;
+            const loggedUser = users[0];
+            setUser(loggedUser);
+            localStorage.setItem("user", JSON.stringify(loggedUser));
 
-            if (users.length === 0) {
-                setError("El usuario no existe.");
-                return;
-            }
-
-            // Si el usuario existe, simulamos el login:
-            const user = users[0];
-            localStorage.setItem("loggedUser", JSON.stringify(user));
             navigate("/home");
         } catch (err) {
             console.error(err);
-            setError("Error al conectar con el servidor.");
+            setError("Error al iniciar sesión");
         }
     };
 
     return (
-    <div className="d-flex align-items-center justify-content-center vh-100 bg-light">
-        <div className="card shadow-lg p-4" style={{ width: "100%", maxWidth: "400px" }}>
-            <div className="card-body">
-                <h3 className="card-title text-center mb-4 text-primary fw-bold">
-                    UnaHur Anti-Social Net 👽
-                </h3>
-
+        <div className="container d-flex justify-content-center align-items-center vh-100">
+            <div className="card shadow p-4" style={{ width: "100%", maxWidth: "400px" }}>
+                <h3 className="card-title text-center mb-4">Iniciar Sesión</h3>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label htmlFor="nickName" className="form-label">
-                            Nickname
-                        </label>
+                        <label htmlFor="nickName" className="form-label">NickName</label>
                         <input
-                            type="text"
-                            className="form-control"
-                            id="nickName"
-                            value={nickName}
-                            onChange={(e) => setNickName(e.target.value)}
-                            placeholder="Ingresá tu nickname"
-                            required
+                        type="text"
+                        id="nickName"
+                        className="form-control"
+                        value={nickName}
+                        onChange={(e) => setNickName(e.target.value)}
+                        required
                         />
                     </div>
-
                     <div className="mb-3">
-                        <label htmlFor="password" className="form-label">
-                            Contraseña
-                        </label>
+                        <label htmlFor="password" className="form-label">Contraseña</label>
                         <input
-                            type="password"
-                            className="form-control"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="123456"
-                            required
+                        type="password"
+                        id="password"
+                        className="form-control"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
                         />
                     </div>
-
-                    {error && (
-                        <div className="alert alert-danger py-2 text-center" role="alert">
-                            {error}
-                        </div>
-                    )}
-
-                    <button
-                        type="submit"
-                        className="btn btn-primary w-100 mt-2"
-                        >
-                        Iniciar sesión
-                    </button>
+                    {error && <div className="alert alert-danger">{error}</div>}
+                    <button type="submit" className="btn btn-primary w-100">Ingresar</button>
                 </form>
-
-                <p className="text-muted text-center mt-4" style={{ fontSize: "0.9rem" }}>
-                    * Simulación de login (no se requiere autenticación real)
-                </p>
             </div>
         </div>
-    </div>
     )
 }
 

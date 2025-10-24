@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
 
+// Abria que pobrar algo para que HomePage solo sea accesible si hay un usuario logueado...
 function App() {
   return (
     <Router>
