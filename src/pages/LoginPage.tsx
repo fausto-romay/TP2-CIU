@@ -44,6 +44,7 @@ function LoginPage() {
     };
 
     return (
+        <>
         <div className="login-page d-flex align-items-center justify-content-center vh-100">
             <div className="login-wrapper container d-flex justify-content-center align-items-center">
             <div className="image-side d-none d-md-flex justify-content-center align-items-center">
@@ -92,6 +93,10 @@ function LoginPage() {
             </div>
             </div>
         </div>
+        <footer>
+            <h5>© 2025 Alumnos del grupo 10</h5>
+        </footer>
+        </>
     );
 }
 
