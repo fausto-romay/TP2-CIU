@@ -46,7 +46,6 @@ function LoginPage() {
     return (
         <div className="login-page d-flex align-items-center justify-content-center vh-100">
             <div className="login-wrapper container d-flex justify-content-center align-items-center">
-            {/* Imagen grande al costado izquierdo */}
             <div className="image-side d-none d-md-flex justify-content-center align-items-center">
                 <img
                 src={imagen}
@@ -54,8 +53,6 @@ function LoginPage() {
                 className="login-side-image"
                 />
             </div>
-
-            {/* Cuadro de login al costado derecho */}
             <div className="form-side d-flex justify-content-center align-items-center">
                 <div className="card shadow p-4 text-center login-card">
                 <img
