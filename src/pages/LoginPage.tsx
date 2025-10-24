@@ -1,7 +1,10 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/userContext";
+import { UserContext } from "../context/UserContext";
 import { getUserByNickName } from "../services/userService";
+import logo from "../assets/logo2.png";
+import "../styles/loginPage.css";
+
 
 function LoginPage() {
     const [nickName, setNickName] = useState("");
@@ -42,32 +45,34 @@ function LoginPage() {
     return (
         <div className="container d-flex justify-content-center align-items-center vh-100">
             <div className="card shadow p-4" style={{ width: "100%", maxWidth: "400px" }}>
-                <h3 className="card-title text-center mb-4">Iniciar Sesión</h3>
+                <div className="text-center mb-4">
+                    <img src={logo} alt="UnaHur Anti-Social Net" className="login-logo" />
+                </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label htmlFor="nickName" className="form-label">NickName</label>
                         <input
-                        type="text"
-                        id="nickName"
-                        className="form-control"
-                        value={nickName}
-                        onChange={(e) => setNickName(e.target.value)}
-                        required
+                            type="text"
+                            id="nickName"
+                            className="form-control"
+                            placeholder="Usuario"
+                            value={nickName}
+                            onChange={(e) => setNickName(e.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-3">
-                        <label htmlFor="password" className="form-label">Contraseña</label>
                         <input
-                        type="password"
-                        id="password"
-                        className="form-control"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
+                            type="password"
+                            id="password"
+                            className="form-control"
+                            placeholder="Contraseña"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
                         />
                     </div>
                     {error && <div className="alert alert-danger">{error}</div>}
-                    <button type="submit" className="btn btn-primary w-100">Ingresar</button>
+                    <button type="submit" className="btn btn-primary w-100">Iniciar sesión</button>
                 </form>
             </div>
         </div>

@@ -1,0 +1,73 @@
+body {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    min-height: 100vh;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    background-color: #ffffffee; 
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-weight: 600;
+    color: #2d3436;
+}
+
+.form-control {
+    border-radius: 10px;
+    border: 1px solid #dcdde1;
+    padding: 10px;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: #0984e3;
+    box-shadow: 0 0 0 0.2rem rgba(9, 132, 227, 0.25);
+}
+
+.btn-primary {
+    background: #0984e3;
+    border: none;
+    border-radius: 10px;
+    font-weight: 500;
+    padding: 10px 0;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+.btn-primary:hover {
+    background: #74b9ff;
+    transform: translateY(-1px);
+}
+
+.alert {
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.9rem;
+}
+
+/* Logo */
+.login-logo {
+    width: 190px;
+    height: auto;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+    transition: transform 0.2s ease-in-out;
+}
+
+.login-logo:hover {
+    transform: scale(1.05);
+}
