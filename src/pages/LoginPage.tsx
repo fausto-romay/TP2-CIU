@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { getUserByNickName } from "../services/userService";
 import logo from "../assets/logo2.png";
+import imagen from "../assets/imagenFondo.png";
 import "../styles/loginPage.css";
 
 
@@ -43,40 +44,58 @@ function LoginPage() {
     };
 
     return (
-        <div className="container d-flex justify-content-center align-items-center vh-100">
-            <div className="card shadow p-4" style={{ width: "100%", maxWidth: "400px" }}>
-                <div className="text-center mb-4">
-                    <img src={logo} alt="UnaHur Anti-Social Net" className="login-logo" />
-                </div>
+        <div className="login-page d-flex align-items-center justify-content-center vh-100">
+            <div className="login-wrapper container d-flex justify-content-center align-items-center">
+            {/* Imagen grande al costado izquierdo */}
+            <div className="image-side d-none d-md-flex justify-content-center align-items-center">
+                <img
+                src={imagen}
+                alt="Fondo Unahur"
+                className="login-side-image"
+                />
+            </div>
+
+            {/* Cuadro de login al costado derecho */}
+            <div className="form-side d-flex justify-content-center align-items-center">
+                <div className="card shadow p-4 text-center login-card">
+                <img
+                    src={logo}
+                    alt="Unahur Logo"
+                    className="login-logo mb-3"
+                />
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <input
-                            type="text"
-                            id="nickName"
-                            className="form-control"
-                            placeholder="Usuario"
-                            value={nickName}
-                            onChange={(e) => setNickName(e.target.value)}
-                            required
-                        />
+                    <input
+                        type="text"
+                        id="nickName"
+                        className="form-control"
+                        placeholder="Usuario"
+                        value={nickName}
+                        onChange={(e) => setNickName(e.target.value)}
+                        required
+                    />
                     </div>
                     <div className="mb-3">
-                        <input
-                            type="password"
-                            id="password"
-                            className="form-control"
-                            placeholder="Contraseña"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                    <input
+                        type="password"
+                        id="password"
+                        className="form-control"
+                        placeholder="Contraseña"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
                     </div>
                     {error && <div className="alert alert-danger">{error}</div>}
-                    <button type="submit" className="btn btn-primary w-100">Iniciar sesión</button>
+                    <button type="submit" className="btn btn-primary w-100">
+                    Ingresar
+                    </button>
                 </form>
+                </div>
+            </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default LoginPage;
