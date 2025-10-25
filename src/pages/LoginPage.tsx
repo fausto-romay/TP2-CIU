@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import { getUserByNickName } from "../services/userService";
 import logo from "../assets/logo2.png";
@@ -89,6 +89,7 @@ function LoginPage() {
                     Ingresar
                     </button>
                 </form>
+                <p className="mt-2 pt-2">¿No tienes cuenta? <Link to="./signup">¡Regístrate ahora!</Link></p>
                 </div>
             </div>
             </div>
