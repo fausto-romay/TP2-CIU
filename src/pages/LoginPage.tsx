@@ -95,7 +95,7 @@ function LoginPage() {
             </div>
         </div>
         <footer>
-            <h5>© 2025 Alumnos del grupo 10</h5>
+            <h5>©2025 Todos los derechos reservados - Grupo 10 CIU-Unahur</h5>
         </footer>
         </>
     );
