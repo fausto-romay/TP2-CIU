@@ -9,7 +9,7 @@ export interface User {
 
 export const getUsers = async (): Promise<User[]> => {
     try {
-        const response = await axios.get<User[]>(`${API_URL}/users`);
+        const response = await axios.get<User[]>(`${API_URL}/user`);
         return response.data;
     } catch (error) {
         console.error("Error al obtener usuarios:", error);
@@ -19,7 +19,7 @@ export const getUsers = async (): Promise<User[]> => {
 
 export const getUserByNickName = async (nickName: string): Promise<User[]> => {
     try {
-        const response = await axios.get<User[]>(`${API_URL}/users?nickName=${nickName}`);
+        const response = await axios.get<User[]>(`${API_URL}/user?nickName=${nickName}`);
         return response.data;
     } catch (error) {
         console.error(`Error al obtener usuario ${nickName}:`, error);
