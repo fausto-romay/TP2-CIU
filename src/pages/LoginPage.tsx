@@ -1,18 +1,16 @@
 import { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { getUserByNickName } from "../services/userService";
+import { loginUser } from "../services/userService"; // usar login del backend
 import logo from "../assets/logo2.png";
 import imagen from "../assets/imagenFondo.png";
 import "../styles/loginPage.css";
-
 
 function LoginPage() {
     const [nickName, setNickName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
-
     const { setUser } = useContext(UserContext);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -20,26 +18,18 @@ function LoginPage() {
         setError("");
 
         try {
-            const users = await getUserByNickName(nickName);
+            // llamada real al backend
+            const userData = await loginUser(nickName, password);
 
-            if (!users || users.length === 0) {
-                setError("Usuario no encontrado");
-                return;
-            }
-
-            if (password !== "123456") {
-                setError("Contraseña incorrecta");
-                return;
-            }
-
-            const loggedUser = users[0];
-            setUser(loggedUser);
-            localStorage.setItem("user", JSON.stringify(loggedUser));
+            // guardar usuario en contexto y localStorage
+            setUser(userData);
+            localStorage.setItem("user", JSON.stringify(userData));
 
             navigate("/home");
         } catch (err) {
             console.error(err);
-            setError("Error al iniciar sesión");
+            if (typeof err === "string") setError(err);
+            else setError("Error al iniciar sesión");
         }
     };
 
@@ -48,19 +38,11 @@ function LoginPage() {
         <div className="login-page d-flex align-items-center justify-content-center vh-100">
             <div className="login-wrapper container d-flex justify-content-center align-items-center">
             <div className="image-side d-none d-md-flex justify-content-center align-items-center">
-                <img
-                src={imagen}
-                alt="Fondo Unahur"
-                className="login-side-image"
-                />
+                <img src={imagen} alt="Fondo Unahur" className="login-side-image" />
             </div>
             <div className="form-side d-flex justify-content-center align-items-center">
                 <div className="card shadow p-4 text-center login-card">
-                <img
-                    src={logo}
-                    alt="Unahur Logo"
-                    className="login-logo mb-3"
-                />
+                <img src={logo} alt="Unahur Logo" className="login-logo mb-3" />
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                     <input
@@ -89,7 +71,7 @@ function LoginPage() {
                     Ingresar
                     </button>
                 </form>
-                <p className="mt-2 pt-2">¿No tienes cuenta? <Link to="./signup">¡Regístrate ahora!</Link></p>
+                <p className="mt-2 pt-2">¿No tienes cuenta? <Link to="/signup">¡Regístrate ahora!</Link></p>
                 </div>
             </div>
             </div>

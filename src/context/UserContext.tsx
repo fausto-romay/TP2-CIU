@@ -1,8 +1,8 @@
 import { createContext, useState, useEffect, type ReactNode } from "react";
 
-// Definimos interfaz del usuario:
 export interface User {
     id: string;
+    email: string;
     nickName: string;
 }
 
