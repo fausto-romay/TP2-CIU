@@ -6,7 +6,6 @@ export interface User {
     id: string;
     mail: string;
     nickname: string;
-    password?: string;
 }
 
 // Registro:
@@ -27,9 +26,9 @@ export const registerUser = async (userData: Omit<User, "id">) => {
 }
 
 // Login:
-export const loginUser = async (nickName: string) => {
+export const loginUser = async (nickname: string) => {
     try {
-        const response = await axios.post(`${API_URL}/login`, { nickName });
+        const response = await axios.get<User>(`${API_URL}/${ nickname }`);
         return response.data;
     } catch (error: unknown) {
         console.error("Error al iniciar sesión:", error);

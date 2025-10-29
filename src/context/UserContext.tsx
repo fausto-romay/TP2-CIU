@@ -2,8 +2,8 @@ import { createContext, useState, useEffect, type ReactNode } from "react";
 
 export interface User {
     id: string;
-    email: string;
-    nickName: string;
+    mail: string;
+    nickname: string;
 }
 
 interface UserContextType {
