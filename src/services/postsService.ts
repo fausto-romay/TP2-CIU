@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = "http://localhost:3000";
 
 export interface Post extends CreatePost {
   id: number;
@@ -24,7 +24,7 @@ export const getPosts = async (): Promise<Post[]> => {
   }
 };
 
-export const createPost = async (createPost: CreatePost): Promise<Post> => {
+export const newPost = async (createPost: CreatePost): Promise<Post> => {
   const response = await axios.post<Post>(`${API_URL}/post`, createPost);
   return response.data;
 };
