@@ -4,15 +4,15 @@ import axios from "axios";
 const API_URL = "http://localhost:3000/user"; 
 export interface User {
     id: string;
-    email: string;
-    nickName: string;
-    password?: string;   
+    mail: string;
+    nickname: string;
+    password?: string;
 }
 
 // Registro:
 export const registerUser = async (userData: Omit<User, "id">) => {
     try {
-        const response = await axios.post(`${API_URL}/register`, userData);
+        const response = await axios.post(API_URL, userData);
         return response.data;
     } catch (error: unknown) {
         console.error("Error al registrar usuario:", error);
@@ -27,9 +27,9 @@ export const registerUser = async (userData: Omit<User, "id">) => {
 }
 
 // Login:
-export const loginUser = async (nickName: string, password: string) => {
+export const loginUser = async (nickName: string) => {
     try {
-        const response = await axios.post(`${API_URL}/login`, { nickName, password });
+        const response = await axios.post(`${API_URL}/login`, { nickName });
         return response.data;
     } catch (error: unknown) {
         console.error("Error al iniciar sesión:", error);

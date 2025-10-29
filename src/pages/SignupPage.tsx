@@ -6,24 +6,27 @@ import imagen from "../assets/imagenFondo.png";
 import "../styles/loginPage.css";
 
 function SignupPage() {
-    const [email, setEmail] = useState("");
-    const [nickName, setNickName] = useState("");
+    const [mail, setEmail] = useState("");
+    const [nickname, setNickName] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
+    const [registrado, setRegistrado] = useState("")
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+        setRegistrado("");
 
         try {
-            const newUser = { email, nickName, password };
+            const newUser = { mail, nickname };
 
             // llamada real al backend
             await registerUser(newUser);
 
-            alert("Registro exitoso 🎉");
-            navigate("/"); // redirige al login
+            setRegistrado("Usuario creado exitosamente, redirigiendo al Login")
+            setTimeout(() => navigate("/"), 5000); // redirige al login
         } catch (err) {
             console.error(err);
             if (typeof err === "string") setError(err);
@@ -48,7 +51,7 @@ function SignupPage() {
                         id="email"
                         className="form-control"
                         placeholder="Correo electrónico"
-                        value={email}
+                        value={mail}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
@@ -59,7 +62,7 @@ function SignupPage() {
                         id="nickName"
                         className="form-control"
                         placeholder="Nombre de usuario"
-                        value={nickName}
+                        value={nickname}
                         onChange={(e) => setNickName(e.target.value)}
                         required
                     />
@@ -76,6 +79,7 @@ function SignupPage() {
                     />
                     </div>
                     {error && <div className="alert alert-danger">{error}</div>}
+                    {registrado && <div className="alert alert-success">{registrado}</div>}
                     <button type="submit" className="btn btn-primary w-100">
                     Registrarte
                     </button>

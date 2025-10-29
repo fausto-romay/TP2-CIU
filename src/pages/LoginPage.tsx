@@ -7,8 +7,7 @@ import imagen from "../assets/imagenFondo.png";
 import "../styles/loginPage.css";
 
 function LoginPage() {
-    const [nickName, setNickName] = useState("");
-    const [password, setPassword] = useState("");
+    const [nickname, setNickName] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
@@ -19,7 +18,7 @@ function LoginPage() {
 
         try {
             // llamada real al backend
-            const userData = await loginUser(nickName, password);
+            const userData = await loginUser(nickname);
 
             // guardar usuario en contexto y localStorage
             setUser(userData);
@@ -50,7 +49,7 @@ function LoginPage() {
                         id="nickName"
                         className="form-control"
                         placeholder="Usuario"
-                        value={nickName}
+                        value={nickname}
                         onChange={(e) => setNickName(e.target.value)}
                         required
                     />
@@ -61,8 +60,6 @@ function LoginPage() {
                         id="password"
                         className="form-control"
                         placeholder="Contraseña"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                     </div>
