@@ -5,18 +5,28 @@ import { loginUser } from "../services/userService"; // usar login del backend
 import logo from "../assets/logo2.png";
 import imagen from "../assets/imagenFondo.png";
 import "../styles/loginPage.css";
+import LoadingScreen from "../components/loadingScreen";
 
 function LoginPage() {
     const [nickname, setNickName] = useState("");
+    const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
     const { setUser } = useContext(UserContext);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+        setLoading(true);
 
         try {
+
+            if(password != "12345"){
+                setLoading(false)
+                return setError("Contraseña incorrecta")
+            }
+
             // llamada real al backend
             const userData = await loginUser(nickname);
 
@@ -24,13 +34,19 @@ function LoginPage() {
             setUser(userData);
             localStorage.setItem("user", JSON.stringify(userData));
 
-            navigate("/home");
+            setTimeout(() => {
+                setLoading(false);
+                navigate("/home");
+            },2000);
         } catch (err) {
             console.error(err);
+            setLoading(false);
             if (typeof err === "string") setError(err);
             else setError("Error al iniciar sesión");
         }
     };
+
+    if (loading) return <LoadingScreen/>
 
     return (
         <>
@@ -60,6 +76,7 @@ function LoginPage() {
                         id="password"
                         className="form-control"
                         placeholder="Contraseña"
+                        onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                     </div>

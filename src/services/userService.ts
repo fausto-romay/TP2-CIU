@@ -34,7 +34,7 @@ export const loginUser = async (nickname: string) => {
         console.error("Error al iniciar sesión:", error);
         const message =
             axios.isAxiosError(error)
-                ? (error.response?.data as { message?: string })?.message ?? "Error en el login"
+                ? (error.response?.data as { message?: string })?.message ?? "Usuario no encontrado"
                 : error instanceof Error
                     ? error.message
                     : String(error);

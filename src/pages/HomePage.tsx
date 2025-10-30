@@ -117,7 +117,6 @@ function HomePage() {
   return (
     <>
       <Header />
-
       {/* Crear publicación */}
       <div className="d-flex flex-column justify-content-center align-items-center mt-4">
         <div className="card shadow p-4 w-100" style={{ maxWidth: "700px", width: "90%" }}>
