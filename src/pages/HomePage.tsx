@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { getPosts, newPost } from "../services/postsService";
+import { getPosts } from "../services/postsService";
 import type { Post } from "../services/postsService";
 import noPosts from "../assets/noPostsBored.png";
 import { Link } from "react-router-dom"
