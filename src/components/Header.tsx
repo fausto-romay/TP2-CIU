@@ -8,11 +8,11 @@ export default function Header() {
 
     useEffect(() => {
         // Leer el usuario guardado en localStorage:
-        const storedUser = localStorage.getItem("loggedUser");
+        const storedUser = localStorage.getItem("user");
         if (storedUser) {
             try {
                 const parsedUser = JSON.parse(storedUser);
-                setUserName(parsedUser.name || "Usuario");
+                setUserName(parsedUser.nickName || "Usuario");
             } catch (error) {
                 console.error("Error al leer el usuario:", error);
                 setUserName("Usuario");
@@ -22,7 +22,7 @@ export default function Header() {
 
     // Por ahora solo simula un logout: (agregar en cerrar sesion de header
     const handleLogout = () => {
-        localStorage.removeItem("loggedUser");
+        localStorage.removeItem("user");
         navigate("/");
     }
 

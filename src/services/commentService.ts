@@ -2,11 +2,8 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/comment";
 
-export interface Comment extends createComment {
+export default interface Comment  {
     id: string;
-}
-
-export interface createComment {
     texto: string;
     user: string;
 } 
@@ -27,6 +24,18 @@ export const getCommentById = async (id:string): Promise<Comment> => {
         return response.data;
     } catch (error) {
         console.error("Error al obtener el comentario", error);
+        throw error;
+    }
+};
+
+// Crear un nuevo comentario
+export const createComment = async (commentData: Comment) => {
+    try {
+        const response = await axios.post(`${API_URL}/`, commentData);
+        return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        console.error("Error al crear el comentario:", error.response?.data || error.message);
         throw error;
     }
 };

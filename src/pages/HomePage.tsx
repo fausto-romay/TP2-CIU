@@ -3,8 +3,9 @@ import Header from "../components/Header";
 import { getPosts } from "../services/postsService";
 import type { Post } from "../services/postsService";
 import noPosts from "../assets/noPostsBored.png";
-import { Link } from "react-router-dom"
-// import { getTags } from "../services/tagService" // <-- cuando lo tengas hecho
+import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+import "../styles/home.css"
 
 function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -17,7 +18,11 @@ function HomePage() {
     const [tags, setTags] = useState<string[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-    // Carga de posts
+    // Control de carrusel
+    const [currentImageIndex, setCurrentImageIndex] = useState<{
+        [key: string]: number;
+    }>({});
+
     useEffect(() => {
         const fetchPosts = async () => {
         try {
@@ -32,11 +37,10 @@ function HomePage() {
 
         fetchPosts();
 
-        // Traer lista de tags desde la API (ejemplo)
+        // Traer lista de tags desde la API (ejemplo temporal)
         const fetchTags = async () => {
         try {
-            // const data = await getTags();
-            const data = ["tecnologia", "programacion", "musica", "arte"]; // temporal
+            const data = ["tecnologia", "programacion", "musica", "arte"];
             setTags(data);
         } catch (error) {
             console.error("Error al traer los tags:", error);
@@ -69,7 +73,6 @@ function HomePage() {
         }
 
         try {
-        // Ejemplo de estructura a enviar al backend:
         const newPostData = {
             description,
             userId: 1, // temporal hasta que tengas login
@@ -78,17 +81,13 @@ function HomePage() {
         };
 
         console.log("Post a enviar:", newPostData);
-
-        // await newPost(newPostData);
         alert("¡Publicación creada con éxito!");
 
-        // Reset
         setDescription("");
         setImageUrls([""]);
         setSelectedTags([]);
         setShowModal(false);
 
-        // Refrescar posts
         const updatedPosts = await getPosts();
         setPosts(updatedPosts || []);
         } catch (error) {
@@ -97,31 +96,55 @@ function HomePage() {
         }
     };
 
-    {/* Cargando las publicaciones */}
+    const handlePrev = (postId: string, total: number) => {
+        setCurrentImageIndex((prev) => ({
+        ...prev,
+        [postId]:
+            prev[postId] && prev[postId] > 0 ? prev[postId] - 1 : total - 1,
+        }));
+    };
+
+    const handleNext = (postId: string, total: number) => {
+        setCurrentImageIndex((prev) => ({
+        ...prev,
+        [postId]:
+            prev[postId] && prev[postId] < total - 1 ? prev[postId] + 1 : 0,
+        }));
+    };
+
+    // --- Loading ---
     if (loading) {
         return (
-            <>
+        <>
             <Header />
             <div className="d-flex flex-column justify-content-center align-items-center mt-4">
-                <div className="card p-4 text-center opacity-50" style={{ maxWidth: "700px", width: "90%", height: "100rem" }}>
-                    <div className="d-flex flex-column justify-content-center align-items-center">
-                        <div className="spinner-border text-primary" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                        <p className="fs-5 text-muted mb-0">Cargando..</p>
-                    </div>
+            <div
+                className="card p-4 text-center opacity-50"
+                style={{ maxWidth: "700px", width: "90%", height: "100rem" }}
+            >
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="fs-5 text-muted mb-0">Cargando..</p>
                 </div>
             </div>
-            </>
+            </div>
+        </>
         );
     }
+
 
     return (
         <>
         <Header />
+        <main>
         {/* Crear publicación */}
         <div className="d-flex flex-column justify-content-center align-items-center mt-4">
-            <div className="card shadow p-4 w-100" style={{ maxWidth: "700px", width: "90%" }}>
+            <div
+            className="card shadow p-4 w-100"
+            style={{ maxWidth: "700px", width: "90%" }}
+            >
             <h4 className="card-title mb-3 text-center">
                 ¿Qué estás pensando? ¡Compartilo ahora!
             </h4>
@@ -150,39 +173,121 @@ function HomePage() {
                 <p className="fs-5 text-muted mb-0">No hay publicaciones aún.</p>
                 </div>
             ) : (
-                // carga de posts
-                posts.map((post) => (
-                <div key={post._id} className="card mb-3 shadow-sm">
+                posts.map((post) => {
+                const totalImages = post.images?.length || 0;
+                const currentIndex = currentImageIndex[post._id] || 0;
+
+
+                console.log(post.comments)
+
+
+
+
+                return (
+                    <div key={post._id} className="card mb-3 shadow-sm">
                     <div className="card-body">
-                    <p className="fs-5 border-bottom p-2">{post.user.nickname}:</p>
-                    <p>{post.texto}</p>
-                    {post.images &&
-                        post.images.map((img, index) => (
-                        <img
+                        {/* Usuario y texto */}
+                        <p className="fs-5 border-bottom p-2">
+                        {post.user.nickname}:
+                        </p>
+                        <p className="text-break">{post.texto}</p>
+
+                        {/* Carrusel */}
+                        {totalImages > 0 && (
+                        <div
+                            className="position-relative d-flex justify-content-center align-items-center bg-light rounded-4 overflow-hidden mb-2"
+                            style={{
+                            width: "100%",
+                            height: "400px",
+                            maxHeight: "60vh",
+                            }}
+                        >
+                            <img
+                            src={post.images[currentIndex].url}
+                            alt={`imagen ${currentIndex + 1}`}
+                            className="img-fluid w-100 h-100"
+                            style={{
+                                objectFit: "cover",
+                                transition: "opacity 0.3s ease-in-out",
+                            }}
+                            />
+
+                            {totalImages > 1 && (
+                            <>
+                                <button
+                                onClick={() =>
+                                    handlePrev(post._id, totalImages)
+                                }
+                                className="btn btn-light position-absolute start-0 top-50 translate-middle-y rounded-circle shadow"
+                                style={{
+                                    opacity: 0.8,
+                                    width: "40px",
+                                    height: "40px",
+                                }}
+                                >
+                                ❮
+                                </button>
+                                <button
+                                onClick={() =>
+                                    handleNext(post._id, totalImages)
+                                }
+                                className="btn btn-light position-absolute end-0 top-50 translate-middle-y rounded-circle shadow"
+                                style={{
+                                    opacity: 0.8,
+                                    width: "40px",
+                                    height: "40px",
+                                }}
+                                >
+                                ❯
+                                </button>
+
+                                <div
+                                className="position-absolute bottom-0 start-50 translate-middle-x bg-dark text-white px-3 py-1 rounded-pill mb-2 small opacity-75"
+                                style={{ fontSize: "0.85rem" }}
+                                >
+                                {currentIndex + 1} / {totalImages}
+                                </div>
+                            </>
+                            )}
+                        </div>
+                        )}
+
+                        {/* Tags */}
+                        {post.tags &&
+                        post.tags.map((tag, index) => (
+                            <span
                             key={index}
-                            src={img.url}
-                            alt="imagen del post"
-                            className="img-fluid rounded mb-2 w-100"
-                        />
+                            className="badge bg-secondary me-1 my-2"
+                            >
+                            #{tag.nombre}
+                            </span>
+                        ))}
                         
-                        ))}
-                    {post.tags &&
-                        post.tags.map((tags, index) => (
-                        <span key={index} className="badge bg-secondary me-1">
-                            #{tags.nombre}
-                        </span>
-                        ))}
-                    <p className="border-top m-2">Comentarios: {post.comments.length}</p>
-                    <Link to={`/post/${post._id}`}>Ver más</Link>
+                        {/* Comentarios */}
+                        <div className="my-2 border-top pt-2">
+                        <div className="d-flex justify-content-start align-items-center">
+                            <p className="mb-0 opacity-50">
+                            Comentarios: {post.comments.length}
+                            </p>
+                            <div className="mx-2 opacity-50">|</div>
+                            <Link
+                            className="link-secondary link-offset-2 link-opacity-50-hover"
+                            style={{ textDecoration: "none" }}
+                            to={`/post/${post._id}`}
+                            >
+                            Ver más
+                            </Link>
+                        </div>
+                        </div>
                     </div>
-                </div>
-                ))
+                    </div>
+                );
+                })
             )}
             </div>
         </div>
 
-
-        {/* Modal controlado por estado */}
+        {/* Modal */}
         {showModal && (
             <div
             className="modal fade show d-block"
@@ -222,7 +327,9 @@ function HomePage() {
                         className="form-control mb-2"
                         placeholder="URL de imagen"
                         value={url}
-                        onChange={(e) => handleImageChange(index, e.target.value)}
+                        onChange={(e) =>
+                        handleImageChange(index, e.target.value)
+                        }
                     />
                     ))}
                     <button
@@ -262,7 +369,11 @@ function HomePage() {
                     >
                     Cancelar
                     </button>
-                    <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+                    <button
+                    type="button"
+                    className="btn btn-primary"
+                    onClick={handleSubmit}
+                    >
                     Publicar
                     </button>
                 </div>
@@ -270,6 +381,8 @@ function HomePage() {
             </div>
             </div>
         )}
+        </main>
+        <Footer />
         </>
     );
 }
