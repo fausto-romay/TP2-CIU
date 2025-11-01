@@ -1,12 +1,22 @@
 import axios from "axios";
+import type { User } from "./userService";
+import type { Post } from "./postsService";
 
 const API_URL = "http://localhost:3000/comment";
 
 export default interface Comment  {
-    id: string;
+    _id: string;
+    texto: string;
+    user: User;
+    post: Post; 
+    createdAt: string;
+} 
+
+export interface CreateComment {
     texto: string;
     user: string;
-} 
+    post: number;
+}
 
 export const getComments = async (): Promise<Comment[]> => {
     try {
@@ -29,7 +39,7 @@ export const getCommentById = async (id:string): Promise<Comment> => {
 };
 
 // Crear un nuevo comentario
-export const createComment = async (commentData: Comment) => {
+export const createComment = async (commentData: CreateComment) => {
     try {
         const response = await axios.post(`${API_URL}/`, commentData);
         return response.data;

@@ -6,6 +6,8 @@ import noPosts from "../assets/noPostsBored.png";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import "../styles/home.css"
+import { getTags } from "../services/tagService";
+import type { Tag } from "../services/tagService"
 
 function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -15,7 +17,7 @@ function HomePage() {
     // --- Campos del nuevo post ---
     const [description, setDescription] = useState("");
     const [imageUrls, setImageUrls] = useState<string[]>([""]);
-    const [tags, setTags] = useState<string[]>([]);
+    const [tags, setTags] = useState<Tag[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     // Control de carrusel
@@ -36,20 +38,18 @@ function HomePage() {
         };
 
         fetchPosts();
-
+        
         // Traer lista de tags desde la API (ejemplo temporal)
         const fetchTags = async () => {
         try {
-            const data = ["tecnologia", "programacion", "musica", "arte"];
-            setTags(data);
+            const data = await getTags();
+            setTags(data || []);
         } catch (error) {
             console.error("Error al traer los tags:", error);
         }
         };
-
         fetchTags();
     }, []);
-
     const handleAddImageField = () => {
         setImageUrls([...imageUrls, ""]);
     };
@@ -96,7 +96,7 @@ function HomePage() {
         }
     };
 
-    const handlePrev = (postId: string, total: number) => {
+    const handlePrev = (postId:number, total: number) => {
         setCurrentImageIndex((prev) => ({
         ...prev,
         [postId]:
@@ -104,7 +104,7 @@ function HomePage() {
         }));
     };
 
-    const handleNext = (postId: string, total: number) => {
+    const handleNext = (postId:number, total: number) => {
         setCurrentImageIndex((prev) => ({
         ...prev,
         [postId]:
@@ -178,8 +178,6 @@ function HomePage() {
                 const currentIndex = currentImageIndex[post._id] || 0;
 
 
-                console.log(post.comments)
-
 
 
 
@@ -193,7 +191,7 @@ function HomePage() {
                         <p className="text-break">{post.texto}</p>
 
                         {/* Carrusel */}
-                        {totalImages > 0 && (
+                        {post.images && totalImages > 0 && (
                         <div
                             className="position-relative d-flex justify-content-center align-items-center bg-light rounded-4 overflow-hidden mb-2"
                             style={{
@@ -338,23 +336,23 @@ function HomePage() {
                     >
                     <i className="bi bi-images"></i> + imágenes
                     </button>
-
+                    
                     {/* Selección de tags */}
                     <div className="mt-3">
                     <p className="fw-semibold mb-1">Seleccioná etiquetas:</p>
                     <div className="d-flex flex-wrap">
-                        {tags.map((tag) => (
+                        {tags.map((tag:Tag) => (
                         <button
-                            key={tag}
+                            key={tag.nombre}
                             type="button"
                             className={`btn btn-sm m-1 ${
-                            selectedTags.includes(tag)
+                            selectedTags.includes(tag.nombre)
                                 ? "btn-info text-white"
                                 : "btn-outline-info"
                             }`}
-                            onClick={() => handleToggleTag(tag)}
+                            onClick={() => handleToggleTag(tag.nombre)}
                         >
-                            #{tag}
+                            #{tag.nombre}
                         </button>
                         ))}
                     </div>

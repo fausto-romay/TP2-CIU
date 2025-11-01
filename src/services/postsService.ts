@@ -1,4 +1,7 @@
 import axios from "axios";
+import type { Tag } from "./tagService";
+import type { User } from "./userService";
+import type Comment from "./commentService"
 
 const API_URL = "http://localhost:3000/post";
 
@@ -6,11 +9,17 @@ export interface Post extends CreatePost {
   _id: number;
 }
 
+interface Image {
+  _id: string;
+  url: string;
+}
+
 export interface CreatePost {
-  user: string;
+  user: User;
   texto: string;
-  images?: string[]; // <-- opcional
-  tags?: string[];  // <-- opcional
+  images?: Image[]; // <-- opcional
+  tags?: Tag[];  // <-- opcional
+  comments: Comment[]
 }
 
 

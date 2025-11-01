@@ -3,7 +3,7 @@ import axios from "axios";
 // URL base de tu API: "https://github.com/EP-UnaHur-2025C2/anti-social-documental-grupo1"
 const API_URL = "http://localhost:3000/user"; 
 export interface User {
-    id: string;
+    _id: string;
     mail: string;
     nickname: string;
 }

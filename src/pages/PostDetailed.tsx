@@ -1,29 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../components/Header";
-import { getPostById } from "../services/postsService";
+import { getPostById, type Post } from "../services/postsService";
 import { createComment } from "../services/commentService";
 import type Comment from "../services/commentService";
 import Footer from "../components/Footer";
 import "../styles/postDetailed.css";
 import "../styles/footer.css";
-
-interface Image {
-  url: string;
-}
-
-interface User {
-  nickname: string;
-  _id?: string;
-}
-
-interface Post {
-  _id: string;
-  texto: string;
-  user: User;
-  images: Image[];
-  comments: Comment[]; // ✅ ya no string[]
-}
 
 
 export default function PostDetailed() {
@@ -57,12 +40,6 @@ useEffect(() => {
     setComments(post.comments);
   }
 }, [post]);
-
-
-console.log(comments)
-
-
-  console.log(comments)
 
   const images = post?.images || [];
   const totalImages = images.length;
