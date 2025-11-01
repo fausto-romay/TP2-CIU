@@ -1,0 +1,96 @@
+.navBar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.8rem 2rem;
+    background-color: #fefefe;
+  
+}
+
+.botonDesplegable {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: black;
+    display: none;
+}
+
+.logoNav {
+    height: 80px;
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.navRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 10px;
+}
+
+.navIcons {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.icon {
+    margin: 5px;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.icon:hover {
+    transform: scale(1.1);
+    color: blue;
+}
+
+.dropdown {
+    font-size: 1.2rem;
+    position: relative;
+}
+
+.dropdown button {
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    transition: all 0.2 ease;
+    cursor: pointer;
+}
+
+.dropdown button:hover {
+    border-color: blue;
+}
+
+.userButton {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+}
+
+.dropdownMenu {
+    position: absolute;
+    background-color: #333;
+    border-radius: 5px;
+    padding: 5px 0;
+    list-style: none;
+    min-width: 150px;
+}
+
+.dropdown li button {
+    background: none;
+    border: none;
+    color: white;
+    width: 100%;
+    text-align: left;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.dropdownMenu li button:hover {
+    background-color: #444;
+}

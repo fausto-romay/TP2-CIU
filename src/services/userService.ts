@@ -3,8 +3,8 @@ import axios from "axios";
 const API_URL = "http://localhost:3000/user";
 
 export interface User {
-    _id: string;
-    mail?: string;
+    id: string;
+    mail: string;
     nickname: string;
 }
 

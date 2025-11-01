@@ -26,6 +26,8 @@ function LoginPage() {
                 setLoading(false);
                 return setError("Contraseña incorrecta");
             }
+            
+            setLoading(true)
 
             // 🔹 Llamada al backend
             const userData = await loginUser(nickname.trim());
@@ -34,8 +36,11 @@ function LoginPage() {
             setUser(userData);
             localStorage.setItem("user", JSON.stringify(userData));
 
+            setTimeout(() => {
             setLoading(false);
             navigate("/home");
+            }, 2000)
+            
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             console.error(err);

@@ -6,9 +6,12 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import App from './App'
+import { UserProvider } from './context/UserContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <UserProvider>
+        <App/>
+    </UserProvider>
   </StrictMode>,
 )
