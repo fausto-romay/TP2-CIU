@@ -12,7 +12,7 @@ export default function Header() {
         if (storedUser) {
             try {
                 const parsedUser = JSON.parse(storedUser);
-                setUserName(parsedUser.nickName || "Usuario");
+                setUserName(parsedUser.nickname || "Usuario");
             } catch (error) {
                 console.error("Error al leer el usuario:", error);
                 setUserName("Usuario");

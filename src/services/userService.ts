@@ -1,15 +1,15 @@
 import axios from "axios";
 
-// URL base de tu API: "https://github.com/EP-UnaHur-2025C2/anti-social-documental-grupo1"
-const API_URL = "http://localhost:3000/user"; 
+const API_URL = "http://localhost:3000/user";
+
 export interface User {
     _id: string;
-    mail: string;
+    mail?: string;
     nickname: string;
 }
 
-// Registro:
-export const registerUser = async (userData: Omit<User, "id">) => {
+// 🔹 Registrar usuario
+export const registerUser = async (userData: Omit<User, "_id">) => {
     try {
         const response = await axios.post(API_URL, userData);
         return response.data;
@@ -23,12 +23,12 @@ export const registerUser = async (userData: Omit<User, "id">) => {
                     : String(error);
         throw message;
     }
-}
+};
 
-// Login:
+// 🔹 Login: busca usuario por nickname
 export const loginUser = async (nickname: string) => {
     try {
-        const response = await axios.get<User>(`${API_URL}/${ nickname }`);
+        const response = await axios.get<User>(`${API_URL}/${encodeURIComponent(nickname)}`);
         return response.data;
     } catch (error: unknown) {
         console.error("Error al iniciar sesión:", error);
@@ -40,12 +40,12 @@ export const loginUser = async (nickname: string) => {
                     : String(error);
         throw message;
     }
-}
+};
 
-// Obtener usuarios:
+// 🔹 Obtener todos los usuarios
 export const getUsers = async (): Promise<User[]> => {
     try {
-        const response = await axios.get<User[]>(`${API_URL}/`);
+        const response = await axios.get<User[]>(API_URL);
         return response.data;
     } catch (error) {
         console.error("Error al obtener usuarios:", error);

@@ -7,6 +7,10 @@ export interface Tag {
   nombre: string;
 }
 
+interface CreateTag {
+  nombre: string;
+}
+
 export const getTags = async (): Promise<Tag[]> => {
   try {
     const response = await axios.get<Tag[]>(`${API_URL}`);
@@ -17,3 +21,13 @@ export const getTags = async (): Promise<Tag[]> => {
   }
 };
 
+export const createTags = async (tagsData: CreateTag[]) => {
+    try {
+        const response = await axios.post(`${API_URL}/`, tagsData);
+        return response.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+        console.error("Error al crear los tags:", error.response?.data || error.message);
+        throw error;
+    }
+};

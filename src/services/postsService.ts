@@ -7,9 +7,10 @@ const API_URL = "http://localhost:3000/post";
 
 export interface Post extends CreatePost {
   _id: number;
+  comments: Comment[]
 }
 
-interface Image {
+export interface Image {
   _id: string;
   url: string;
 }
@@ -19,7 +20,6 @@ export interface CreatePost {
   texto: string;
   images?: Image[]; // <-- opcional
   tags?: Tag[];  // <-- opcional
-  comments: Comment[]
 }
 
 
