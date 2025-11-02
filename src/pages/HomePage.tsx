@@ -18,6 +18,8 @@ function HomePage() {
     const [imageUrls, setImageUrls] = useState<string[]>([""]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [newTag, setNewTag] = useState("");
+
 
     // Filtro por etiquetas
     const [activeTag, setActiveTag] = useState<string | null>(null);
@@ -65,19 +67,44 @@ function HomePage() {
         setImageUrls(newImages);
     };
 
-    const handleToggleTag = (tag: string) => {
-        setSelectedTags((prev) =>
-        prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
-        );
+    // 🔹 Reemplazá tu función handleToggleTag por esta versión:
+    const handleToggleTag = async (tag: string) => {
+        if (!tag) return; // Evita agregar vacío
+
+        try {
+            // Si el tag ya existe, solo lo selecciona o deselecciona
+            const existing = tags.find((t) => t.nombre === tag);
+            if (existing) {
+                setSelectedTags((prev) =>
+                    prev.includes(tag)
+                        ? prev.filter((t) => t !== tag)
+                        : [...prev, tag]
+                );
+                setNewTag("");
+                return;
+            }
+
+            // 🔹 Si el tag no existe, lo crea
+            const created = await createTags([{ nombre: tag }]);
+
+            if (created && created.length > 0) {
+                // 🔹 Refrescamos las etiquetas desde el backend
+                const updatedTags = await getTags();
+                setTags(updatedTags || []);
+
+                // 🔹 Agregamos la nueva etiqueta a las seleccionadas
+                setSelectedTags((prev) => [...prev, tag]);
+            }
+
+            setNewTag("");
+        } catch (error) {
+            console.error("Error al crear etiqueta:", error);
+            alert("Hubo un problema al crear la etiqueta");
+        }
     };
 
-    const handleNewTags = (tags: string) => {
-        const tagsInArray = tags
-        .trim()
-        .split(",")
-        .filter((t) => t !== "");
-        setSelectedTags(tagsInArray);
-    };
+
+
 
     // CREAR NUEVO POST
     const handleSubmit = async () => {
@@ -193,20 +220,37 @@ function HomePage() {
         <Header />
         <main className="pb-5">
 
-        <div className="d-flex flex-column justify-content-center align-items-center mt-4"> 
-            <div className="card shadow p-4 w-100" style={{ maxWidth: "700px", width: "90%" }}> 
-                <h4 className="card-title mb-3 text-center"> ¿Qué estás pensando? ¡Compartilo ahora! </h4> 
-                <div className="d-flex justify-content-center align-items-center w-100"> 
-                    <input type="text" 
-                    className="form-control p-3 rounded-5 w-100" 
-                    placeholder="Escribí lo que quieras compartir" 
-                    onClick={() => { 
-                        if (!loggedUser) 
-                        { alert("Iniciá sesión para publicar"); return; } 
-                        setShowModal(true); }} /> 
-                </div> 
-            </div> 
+        <div className="d-flex flex-column justify-content-center align-items-center mt-4">
+            <div
+                className="card shadow p-4 w-100"
+                style={{ maxWidth: "700px", width: "90%" }}
+            >
+                <h4 className="card-title mb-3 text-center">
+                ¿Qué estás pensando? ¡Compartilo ahora!
+                </h4>
+                <div className="d-flex justify-content-center align-items-center w-100">
+                    <div
+                        role="button"
+                        className="form-control p-3 rounded-5 w-100 text-muted"
+                        style={{
+                        cursor: "pointer",
+                        backgroundColor: "#fff",
+                        textAlign: "left",
+                        }}
+                        onClick={() => {
+                        if (!loggedUser) {
+                            alert("Iniciá sesión para publicar");
+                            return;
+                        }
+                        setShowModal(true);
+                        }}
+                    >
+                        Escribí lo que quieras compartir...
+                    </div>
+                </div>
+            </div>
         </div>
+
     
 
             {featuredPosts.length > 0 && (
@@ -385,8 +429,8 @@ function HomePage() {
                     </button>
 
                     <div className="mt-3">
-                        <p className="fw-semibold mb-1">Seleccioná etiquetas:</p>
-                        <div className="d-flex flex-wrap">
+                        <p className="fw-semibold text-center mb-2">Seleccioná etiquetas:</p>
+                        <div className="d-flex flex-wrap justify-content-center">
                         {tags.map((tag: Tag) => (
                             <button
                             key={tag.nombre}
@@ -403,15 +447,30 @@ function HomePage() {
                         ))}
                         </div>
 
-                        <div className="mt-3">
-                        <p className="fw-semibold mb-1">Añadí tus etiquetas:</p>
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="ej: lindo, tierno ..."
-                            onChange={(e) => handleNewTags(e.target.value)}
-                        />
+                        <p className="fw-semibold text-center my-2 mb-2">Crea etiquetas:</p>
+
+                    <div className="d-flex justify-content-center align-items-center my-2">
+                        <div className="input-group my-3" style={{ maxWidth: "400px" }}>
+                            <span className="input-group-text" id="basic-addon1">#</span>
+                            <input
+                                type="text"
+                                className="form-control"
+                                placeholder="Escribe un tag..."
+                                value={newTag}
+                                onChange={(e) => setNewTag(e.target.value)}
+                                aria-label="tag"
+                                aria-describedby="basic-addon1"
+                            />
+                            <button
+                                className="btn btn-outline-primary"
+                                type="button"
+                                onClick={() => handleToggleTag(newTag.trim())}
+                            >
+                                Crear tag
+                            </button>
                         </div>
+                    </div>
+
                     </div>
                     </div>
 

@@ -161,23 +161,26 @@ useEffect(() => {
         </div>
 
         {/* Comentarios */}
+
         <div className="card shadow post-container p-4">
-          <div className="mt-4">
-            <input
-              type="text"
-              className="form-control mb-2"
-              placeholder="Escribe un comentario..."
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-              disabled={loadingComment}
-            />
-            <button
-              className="btn btn-primary rounded-5"
+
+          <div className="input-group mb-3" style={{ maxWidth: "700px" }}>
+              <input
+                type="text"
+                className="form-control mb-1"
+                placeholder="Escribe un comentario..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                disabled={loadingComment}
+              />
+              <button
+              className="btn btn-primary mb-1"
+              type="button"
               onClick={handleAddComment}
               disabled={loadingComment}
-            >
+              >
               {loadingComment ? "Comentando..." : "Comentar"}
-            </button>
+              </button>
           </div>
 
           <div className="border-bottom m-4"></div>
