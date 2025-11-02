@@ -19,10 +19,10 @@ function HomePage() {
     const [tags, setTags] = useState<Tag[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-    // 🔹 Filtro por etiquetas
+    // Filtro por etiquetas
     const [activeTag, setActiveTag] = useState<string | null>(null);
 
-    // 🔹 Publicaciones destacadas
+    // Publicaciones destacadas
     const [featuredPosts, setFeaturedPosts] = useState<Post[]>([]);
 
     // Control del carrusel
@@ -31,9 +31,7 @@ function HomePage() {
     // Usuario logueado
     const [loggedUser, setLoggedUser] = useState<User | null>(null);
 
-    // ==============================
     // CARGAR POSTS, TAGS Y USUARIO
-    // ==============================
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) setLoggedUser(JSON.parse(storedUser));
@@ -44,7 +42,6 @@ function HomePage() {
             setPosts(postsData || []);
             setTags(tagsData || []);
 
-            // 🔹 Seleccionar publicaciones aleatorias
             if (postsData && postsData.length > 0) {
             const shuffled = [...postsData].sort(() => 0.5 - Math.random());
             setFeaturedPosts(shuffled.slice(0, 3)); // 3 destacadas
@@ -59,9 +56,7 @@ function HomePage() {
         fetchData();
     }, []);
 
-    // ==============================
     // MANEJO DE CAMPOS
-    // ==============================
     const handleAddImageField = () => setImageUrls([...imageUrls, ""]);
 
     const handleImageChange = (index: number, value: string) => {
@@ -84,9 +79,7 @@ function HomePage() {
         setSelectedTags(tagsInArray);
     };
 
-    // ==============================
     // CREAR NUEVO POST
-    // ==============================
     const handleSubmit = async () => {
         if (!description.trim()) {
         alert("La descripción es obligatoria");
@@ -142,10 +135,7 @@ function HomePage() {
             if (error instanceof Error) {
                 detalle = error.message;
             } else if (typeof error === "object" && error !== null) {
-                // Si viene de axios u otro, intenta sacar response.data sin usar 'any' directamente
                 try {
-                // aquí usamos una conversión puntual para acceder a response.data de forma segura
-                // (es la forma más práctica cuando la librería retorna objetos con esa forma)
                 const maybeResp = (error as { response?: { data?: unknown } }).response?.data;
                 detalle = maybeResp ? JSON.stringify(maybeResp) : JSON.stringify(error);
                 } catch {
@@ -160,9 +150,7 @@ function HomePage() {
         }
     };
 
-    // ==============================
     // CONTROL DEL CARRUSEL
-    // ==============================
     const handlePrev = (postId: number, total: number) => {
         setCurrentImageIndex((prev) => ({
         ...prev,
@@ -177,16 +165,12 @@ function HomePage() {
         }));
     };
 
-    // ==============================
     // FILTRO POR TAG
-    // ==============================
     const filteredPosts = activeTag
         ? posts.filter((p) => p.tags?.some((t) => t.nombre === activeTag))
         : posts;
 
-    // ==============================
     // LOADING
-    // ==============================
     if (loading) {
         return (
         <>
@@ -203,15 +187,12 @@ function HomePage() {
         );
     }
 
-  // ==============================
   // RENDER PRINCIPAL
-  // ==============================
     return (
         <>
         <Header />
         <main className="pb-5">
 
-            {/* 🔹 Publicaciones destacadas */}
             {featuredPosts.length > 0 && (
             <section className="container mt-4">
                 <h5 className="text-center text-primary mb-3">✨ Publicaciones destacadas</h5>
@@ -241,7 +222,6 @@ function HomePage() {
             </section>
             )}
 
-            {/* 🔹 Filtro por etiquetas */}
             <section className="container mt-4">
             <div className="text-center mb-3">
                 <button
@@ -262,7 +242,6 @@ function HomePage() {
             </div>
             </section>
 
-            {/* Resto del contenido (publicaciones normales) */}
             <div className="d-flex flex-column align-items-center justify-content-center mt-4">
             <div className="w-100" style={{ maxWidth: "700px", width: "90%" }}>
                 {filteredPosts.length === 0 ? (
@@ -283,7 +262,6 @@ function HomePage() {
                         </p>
                         <p className="text-left p-2">{post.texto}</p>
 
-                        {/* Carrusel */}
                         {totalImages > 0 && (
                             <div
                             className="position-relative d-flex justify-content-center align-items-center bg-light rounded-4 overflow-hidden mb-2"
@@ -319,7 +297,6 @@ function HomePage() {
                             </div>
                         )}
 
-                        {/* Tags */}
                         {post.tags &&
                             post.tags.map((tag, index) => (
                             <span key={index} className="badge bg-secondary me-1 my-2">
@@ -327,7 +304,6 @@ function HomePage() {
                             </span>
                             ))}
 
-                        {/* Comentarios */}
                         <div className="my-2 border-top pt-2">
                             <div className="d-flex justify-content-start align-items-center">
                             <p className="mb-0 opacity-50">
@@ -351,7 +327,6 @@ function HomePage() {
             </div>
             </div>
 
-            {/* Modal de crear publicación */}
             {showModal && (
             <div
                 className="modal fade show d-block"
