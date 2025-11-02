@@ -1,97 +1,62 @@
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo2.png";
-import { useState, useEffect, useRef } from "react";
-import { Home, UserRound, Menu } from "lucide-react";
-import "../styles/header.css";
+import { useContext, useState } from "react";
+import { Home, UserRound, LogOut} from "lucide-react";
+import "../styles/header.css"
+import { UserContext } from "../context/UserContext";
 
 export default function Header() {
+    const { user } = useContext(UserContext)
     const navigate = useNavigate();
-    const [userName, setUserName] = useState<string>("");
-    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            const target = event.target as Node;
-            if (dropdownRef.current && !dropdownRef.current.contains(target)) {
-                setDropdownOpen(false);
-            }
-        };
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
-
-    useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            try {
-                const parsedUser = JSON.parse(storedUser);
-                setUserName(parsedUser.nickname || "Usuario");
-            } catch (error) {
-                console.error("Error al leer el usuario:", error);
-                setUserName("Usuario");
-            }
-        }
-    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("user");
         navigate("/");
     };
 
+
     return (
         <header className="header">
-            <nav className="navBar d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center">
-                    <button
-                        className="botonDesplegable d-lg-none"
-                        onClick={() => setMenuOpen((prev) => !prev)}
-                    >
-                        <Menu size={28} />
-                    </button>
-                    <img
-                        className="logoNav"
-                        src={logo}
-                        alt="Unahur net"
-                        onClick={() => navigate("/HomePage")}
-                    />
-                </div>
+        <div className="nav-container">
+            <button
+            className="menu-toggle"
+            onClick={() => setMenuOpen(!menuOpen)}
+        >
+            ☰
+        </button>
 
-                {/* Menú derecho */}
-                <div className={`navRight ${menuOpen ? "show" : ""}`}>
-                    <ul className="navIcons mb-0">
-                        <li>
-                            <Home
-                                className="icon"
-                                onClick={() => navigate("/HomePage")}
-                            />
-                        </li>
-                        <li>
-                            <UserRound
-                                className="icon"
-                                onClick={() => navigate("/Profile")}
-                            />
-                        </li>
-                    </ul>
+        <img
+            src={logo}
+            alt="Logo"
+            className="nav-logo"
+            onClick={() => navigate("/home")}
+        />
 
-                    <div className="dropdown" ref={dropdownRef}>
-                        <button
-                            className="userButton"
-                            onClick={() => setDropdownOpen((prev) => !prev)}
-                        >
-                            ¡Hola, {userName}!
-                        </button>
-                        {dropdownOpen && (
-                            <ul className="dropdownMenu">
-                                <li>
-                                    <button onClick={handleLogout}>Cerrar sesión</button>
-                                </li>
-                            </ul>
-                        )}
-                    </div>
-                </div>
-            </nav>
-        </header>
-    );
+        <div className="nav-right">
+
+            <h1 className="nav-text">Hola, <i className="nav-text-nickname">
+            {user?.nickname}
+            </i>!</h1>
+        <nav className={`nav-icons ${menuOpen ? "open" : ""}`}>
+            <Home
+            className="nav-icon"
+            onClick={() => navigate("/home")}
+            size={26}
+            />
+            <UserRound
+            className="nav-icon"
+            onClick={() => navigate("/profile")}
+            size={26}
+            />
+            <LogOut
+            className="nav-icon logout"
+            onClick={handleLogout}
+            size={26}
+            />
+        </nav>
+            </div>
+        </div>
+    </header>
+  );
 }
