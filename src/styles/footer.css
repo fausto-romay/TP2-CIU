@@ -1,10 +1,21 @@
-footer {
-  background-color: #f8f9fa;
-  padding: 1rem 0;
+.footer {
+  background-color: #343a40; /* gris oscuro tipo Bootstrap */
+  color: #f8f9fa; /* texto blanco */
   text-align: center;
+  padding: 1rem 0;
   width: 100%;
-  position: fixed;
+  position: relative; /* cambia a fixed si querés que siempre esté abajo */
   bottom: 0;
   left: 0;
-  border-top: 1px solid #dee2e6;
 }
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-text {
+  margin: 0;
+  font-size: 0.9rem;
+}
+

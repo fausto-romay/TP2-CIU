@@ -18,45 +18,45 @@ export default function Header() {
 
     return (
         <header className="header">
-        <div className="nav-container">
-            <button
-            className="menu-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
-        >
-            ☰
-        </button>
+            <div className="nav-container">
+                <button
+                className="menu-toggle"
+                onClick={() => setMenuOpen(!menuOpen)}
+            >
+                ☰
+            </button>
 
-        <img
-            src={logo}
-            alt="Logo"
-            className="nav-logo"
-            onClick={() => navigate("/home")}
-        />
+            <img
+                src={logo}
+                alt="Logo"
+                className="nav-logo"
+                onClick={() => navigate("/home")}
+            />
 
-        <div className="nav-right">
+            <div className="nav-right">
 
-            <h1 className="nav-text">Hola, <i className="nav-text-nickname">
-            {user?.nickname}
-            </i>!</h1>
-        <nav className={`nav-icons ${menuOpen ? "open" : ""}`}>
-            <Home
-            className="nav-icon"
-            onClick={() => navigate("/home")}
-            size={26}
-            />
-            <UserRound
-            className="nav-icon"
-            onClick={() => navigate("/profile")}
-            size={26}
-            />
-            <LogOut
-            className="nav-icon logout"
-            onClick={handleLogout}
-            size={26}
-            />
-        </nav>
+                <h1 className="nav-text">Hola, <i className="nav-text-nickname">
+                {user?.nickname}
+                </i>!</h1>
+            <nav className={`nav-icons ${menuOpen ? "open" : ""}`}>
+                <Home
+                className="nav-icon"
+                onClick={() => navigate("/home")}
+                size={26}
+                />
+                <UserRound
+                className="nav-icon"
+                onClick={() => navigate("/profile")}
+                size={26}
+                />
+                <LogOut
+                className="nav-icon logout"
+                onClick={handleLogout}
+                size={26}
+                />
+            </nav>
+                </div>
             </div>
-        </div>
-    </header>
-  );
+        </header>
+    );
 }

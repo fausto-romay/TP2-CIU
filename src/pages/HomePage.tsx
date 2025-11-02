@@ -84,15 +84,15 @@ function HomePage() {
                 return;
             }
 
-            // 🔹 Si el tag no existe, lo crea
+            // Si el tag no existe, lo crea
             const created = await createTags([{ nombre: tag }]);
 
             if (created && created.length > 0) {
-                // 🔹 Refrescamos las etiquetas desde el backend
+                // Refrescamos las etiquetas desde el backend
                 const updatedTags = await getTags();
                 setTags(updatedTags || []);
 
-                // 🔹 Agregamos la nueva etiqueta a las seleccionadas
+                // Agregamos la nueva etiqueta a las seleccionadas
                 setSelectedTags((prev) => [...prev, tag]);
             }
 

@@ -61,6 +61,7 @@
 
 .nav-text-nickname{
     background: linear-gradient(90deg, #7a5cff, #00e5ff);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 700;

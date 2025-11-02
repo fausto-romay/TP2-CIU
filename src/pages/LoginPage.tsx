@@ -29,10 +29,10 @@ function LoginPage() {
             
             setLoading(true)
 
-            // 🔹 Llamada al backend
+            // Llamada al backend
             const userData = await loginUser(nickname.trim());
 
-            // 🔹 Guardar usuario en contexto y localStorage
+            // Guardar usuario en contexto y localStorage
             setUser(userData);
             localStorage.setItem("user", JSON.stringify(userData));
 
