@@ -13,11 +13,17 @@ function HomePage() {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
 
-    // --- Campos del nuevo post ---
+    // Campos del nuevo post
     const [description, setDescription] = useState("");
     const [imageUrls, setImageUrls] = useState<string[]>([""]);
     const [tags, setTags] = useState<Tag[]>([]);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+    // 🔹 Filtro por etiquetas
+    const [activeTag, setActiveTag] = useState<string | null>(null);
+
+    // 🔹 Publicaciones destacadas
+    const [featuredPosts, setFeaturedPosts] = useState<Post[]>([]);
 
     // Control del carrusel
     const [currentImageIndex, setCurrentImageIndex] = useState<{ [key: string]: number }>({});
@@ -32,36 +38,31 @@ function HomePage() {
         const storedUser = localStorage.getItem("user");
         if (storedUser) setLoggedUser(JSON.parse(storedUser));
 
-        const fetchPosts = async () => {
+        const fetchData = async () => {
         try {
-            const data = await getPosts();
-            setPosts(data || []);
+            const [postsData, tagsData] = await Promise.all([getPosts(), getTags()]);
+            setPosts(postsData || []);
+            setTags(tagsData || []);
+
+            // 🔹 Seleccionar publicaciones aleatorias
+            if (postsData && postsData.length > 0) {
+            const shuffled = [...postsData].sort(() => 0.5 - Math.random());
+            setFeaturedPosts(shuffled.slice(0, 3)); // 3 destacadas
+            }
         } catch (error) {
-            console.error("Error al traer los posts:", error);
+            console.error("Error al traer los datos:", error);
         } finally {
             setLoading(false);
         }
         };
 
-        const fetchTags = async () => {
-        try {
-            const data = await getTags();
-            setTags(data || []);
-        } catch (error) {
-            console.error("Error al traer los tags:", error);
-        }
-        };
-
-        fetchPosts();
-        fetchTags();
+        fetchData();
     }, []);
 
     // ==============================
     // MANEJO DE CAMPOS
     // ==============================
-    const handleAddImageField = () => {
-        setImageUrls([...imageUrls, ""]);
-    };
+    const handleAddImageField = () => setImageUrls([...imageUrls, ""]);
 
     const handleImageChange = (index: number, value: string) => {
         const newImages = [...imageUrls];
@@ -76,13 +77,12 @@ function HomePage() {
     };
 
     const handleNewTags = (tags: string) => {
-        const tagsInArray = tags.trim()
-            .split(",")
-            .filter((t) => t !== "");
-
+        const tagsInArray = tags
+        .trim()
+        .split(",")
+        .filter((t) => t !== "");
         setSelectedTags(tagsInArray);
     };
-
 
     // ==============================
     // CREAR NUEVO POST
@@ -99,13 +99,11 @@ function HomePage() {
         }
 
         try {
-        // 1️⃣ Crear imágenes (solo si hay URLs válidas)
         const validUrls = imageUrls.filter((url) => url.trim() !== "");
         const imageObjects = validUrls.map((url) => ({ url }));
         const createdImages =
             validUrls.length > 0 ? await createImage(imageObjects) : [];
 
-        // 2️⃣ Manejar tags
         const existingTags = await getTags();
         const tagsToCreate = selectedTags.filter(
             (tag) => !existingTags.some((t) => t.nombre === tag)
@@ -116,13 +114,11 @@ function HomePage() {
             createdTags = await createTags(tagsToCreate.map((nombre) => ({ nombre })));
         }
 
-
         const allTags = [
             ...existingTags.filter((t) => selectedTags.includes(t.nombre)),
             ...createdTags,
         ];
 
-        // 3️⃣ Crear el post con el usuario actual
         const newPostData = {
             texto: description,
             user: loggedUser,
@@ -131,22 +127,36 @@ function HomePage() {
         };
 
         await newPost(newPostData);
-
         alert("¡Publicación creada con éxito!");
 
-        // Reset de campos
         setDescription("");
         setImageUrls([""]);
         setSelectedTags([]);
         setShowModal(false);
 
-        // 4️⃣ Actualizar lista de posts
         const updatedPosts = await getPosts();
         setPosts(updatedPosts || []);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-        console.error("Error al crear el post:", error.response?.data || error.message);
-        alert("Error al publicar el post");
+        } catch (error: unknown) {
+            // Obtener un mensaje seguro dependiendo del tipo de error
+            let detalle = "Error desconocido";
+            if (error instanceof Error) {
+                detalle = error.message;
+            } else if (typeof error === "object" && error !== null) {
+                // Si viene de axios u otro, intenta sacar response.data sin usar 'any' directamente
+                try {
+                // aquí usamos una conversión puntual para acceder a response.data de forma segura
+                // (es la forma más práctica cuando la librería retorna objetos con esa forma)
+                const maybeResp = (error as { response?: { data?: unknown } }).response?.data;
+                detalle = maybeResp ? JSON.stringify(maybeResp) : JSON.stringify(error);
+                } catch {
+                detalle = String(error);
+                }
+            } else {
+                detalle = String(error);
+            }
+
+            console.error("Error al crear el post:", detalle);
+            alert("Error al publicar el post");
         }
     };
 
@@ -168,6 +178,13 @@ function HomePage() {
     };
 
     // ==============================
+    // FILTRO POR TAG
+    // ==============================
+    const filteredPosts = activeTag
+        ? posts.filter((p) => p.tags?.some((t) => t.nombre === activeTag))
+        : posts;
+
+    // ==============================
     // LOADING
     // ==============================
     if (loading) {
@@ -176,63 +193,85 @@ function HomePage() {
             <Header />
             <div className="d-flex flex-column justify-content-center align-items-center mt-4">
             <div className="card p-4 text-center opacity-50" style={{ maxWidth: "700px", width: "90%", height: "100rem" }}>
-                <div className="d-flex flex-column justify-content-center align-items-center">
                 <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden">Loading...</span>
                 </div>
                 <p className="fs-5 text-muted mb-0">Cargando..</p>
-                </div>
             </div>
             </div>
         </>
         );
     }
 
-    // ==============================
-    // RENDER PRINCIPAL
-    // ==============================
+  // ==============================
+  // RENDER PRINCIPAL
+  // ==============================
     return (
         <>
         <Header />
-        <main>
-            {/* Crear publicación */}
-            <div className="d-flex flex-column justify-content-center align-items-center mt-4">
-            <div className="card shadow p-4 w-100" style={{ maxWidth: "700px", width: "90%" }}>
-                <h4 className="card-title mb-3 text-center">
-                ¿Qué estás pensando? ¡Compartilo ahora!
-                </h4>
-                <div className="d-flex justify-content-center align-items-center w-100">
-                <input
-                    type="text"
-                    className="form-control p-3 rounded-5 w-100"
-                    placeholder="Escribí lo que quieras compartir"
-                    onClick={() => {
-                    if (!loggedUser) {
-                        alert("Iniciá sesión para publicar");
-                        return;
-                    }
-                    setShowModal(true);
-                    }}
-                />
-                </div>
-            </div>
-            </div>
+        <main className="pb-5">
 
-            {/* Lista de publicaciones */}
+            {/* 🔹 Publicaciones destacadas */}
+            {featuredPosts.length > 0 && (
+            <section className="container mt-4">
+                <h5 className="text-center text-primary mb-3">✨ Publicaciones destacadas</h5>
+                <div className="row justify-content-center">
+                {featuredPosts.map((post) => (
+                    <div key={post._id} className="col-md-4 mb-3">
+                    <div className="card shadow-sm h-100">
+                        {post.images?.[0] && (
+                        <img
+                            src={post.images[0].url}
+                            className="card-img-top"
+                            alt="destacada"
+                            style={{ height: "200px", objectFit: "cover" }}
+                        />
+                        )}
+                        <div className="card-body">
+                        <h6 className="card-title text-secondary">{post.user?.nickname ?? "Usuario eliminado"}</h6>
+                        <p className="card-text small">{post.texto.slice(0, 100)}...</p>
+                        <Link to={`/post/${post._id}`} className="btn btn-outline-primary btn-sm">
+                            Ver más
+                        </Link>
+                        </div>
+                    </div>
+                    </div>
+                ))}
+                </div>
+            </section>
+            )}
+
+            {/* 🔹 Filtro por etiquetas */}
+            <section className="container mt-4">
+            <div className="text-center mb-3">
+                <button
+                className={`btn btn-sm me-2 ${!activeTag ? "btn-primary" : "btn-outline-primary"}`}
+                onClick={() => setActiveTag(null)}
+                >
+                Todos
+                </button>
+                {tags.map((tag) => (
+                <button
+                    key={tag.nombre}
+                    className={`btn btn-sm m-1 ${activeTag === tag.nombre ? "btn-primary text-white" : "btn-outline-primary"}`}
+                    onClick={() => setActiveTag(tag.nombre)}
+                    >
+                    #{tag.nombre}
+                </button>
+                ))}
+            </div>
+            </section>
+
+            {/* Resto del contenido (publicaciones normales) */}
             <div className="d-flex flex-column align-items-center justify-content-center mt-4">
             <div className="w-100" style={{ maxWidth: "700px", width: "90%" }}>
-                {posts.length === 0 ? (
+                {filteredPosts.length === 0 ? (
                 <div className="card shadow p-4 text-center">
-                    <img
-                    src={noPosts}
-                    alt="noPostsImg"
-                    className="img-fluid mb-3"
-                    style={{ maxHeight: "250px", objectFit: "contain" }}
-                    />
-                    <p className="fs-5 text-muted mb-0">No hay publicaciones aún.</p>
+                    <img src={noPosts} alt="noPostsImg" className="img-fluid mb-3" style={{ maxHeight: "250px", objectFit: "contain" }} />
+                    <p className="fs-5 text-muted mb-0">No hay publicaciones con ese filtro.</p>
                 </div>
                 ) : (
-                posts.map((post) => {
+                filteredPosts.map((post) => {
                     const totalImages = post.images?.length || 0;
                     const currentIndex = currentImageIndex[post._id] || 0;
 
@@ -275,12 +314,6 @@ function HomePage() {
                                 >
                                     ❯
                                 </button>
-                                <div
-                                    className="position-absolute bottom-0 start-50 translate-middle-x bg-dark text-white px-3 py-1 rounded-pill mb-2 small opacity-75"
-                                    style={{ fontSize: "0.85rem" }}
-                                >
-                                    {currentIndex + 1} / {totalImages}
-                                </div>
                                 </>
                             )}
                             </div>
@@ -297,7 +330,9 @@ function HomePage() {
                         {/* Comentarios */}
                         <div className="my-2 border-top pt-2">
                             <div className="d-flex justify-content-start align-items-center">
-                            <p className="mb-0 opacity-50">Comentarios: {post.comments?.length ?? 0}</p>
+                            <p className="mb-0 opacity-50">
+                                Comentarios: {post.comments?.length ?? 0}
+                            </p>
                             <div className="mx-2 opacity-50">|</div>
                             <Link
                                 className="link-secondary link-offset-2 link-opacity-50-hover"
@@ -316,7 +351,7 @@ function HomePage() {
             </div>
             </div>
 
-            {/* Modal para crear post */}
+            {/* Modal de crear publicación */}
             {showModal && (
             <div
                 className="modal fade show d-block"
@@ -330,11 +365,7 @@ function HomePage() {
                 <div className="modal-content">
                     <div className="modal-header">
                     <h1 className="modal-title fs-5">Crear nueva publicación</h1>
-                    <button
-                        type="button"
-                        className="btn-close"
-                        onClick={() => setShowModal(false)}
-                    ></button>
+                    <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                     </div>
                     <div className="modal-body">
                     <textarea
@@ -358,10 +389,7 @@ function HomePage() {
                         onChange={(e) => handleImageChange(index, e.target.value)}
                         />
                     ))}
-                    <button
-                        className="btn btn-outline-info rounded-5 m-1"
-                        onClick={handleAddImageField}
-                    >
+                    <button className="btn btn-outline-info rounded-5 m-1" onClick={handleAddImageField}>
                         <i className="bi bi-images"></i> + imágenes
                     </button>
 
@@ -385,18 +413,19 @@ function HomePage() {
                         </div>
 
                         <div className="mt-3">
-                            <p className="fw-semibold mb-1">Añadí tus etiquetas:</p>
-                            <input type="text" className="form-control" placeholder="ej: lindo, tierno ..." onChange={(e) => handleNewTags(e.target.value)}/>
+                        <p className="fw-semibold mb-1">Añadí tus etiquetas:</p>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="ej: lindo, tierno ..."
+                            onChange={(e) => handleNewTags(e.target.value)}
+                        />
                         </div>
                     </div>
                     </div>
 
                     <div className="modal-footer">
-                    <button
-                        type="button"
-                        className="btn btn-secondary"
-                        onClick={() => setShowModal(false)}
-                    >
+                    <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
                         Cancelar
                     </button>
                     <button type="button" className="btn btn-primary" onClick={handleSubmit}>
