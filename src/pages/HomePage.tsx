@@ -193,6 +193,22 @@ function HomePage() {
         <Header />
         <main className="pb-5">
 
+        <div className="d-flex flex-column justify-content-center align-items-center mt-4"> 
+            <div className="card shadow p-4 w-100" style={{ maxWidth: "700px", width: "90%" }}> 
+                <h4 className="card-title mb-3 text-center"> ¿Qué estás pensando? ¡Compartilo ahora! </h4> 
+                <div className="d-flex justify-content-center align-items-center w-100"> 
+                    <input type="text" 
+                    className="form-control p-3 rounded-5 w-100" 
+                    placeholder="Escribí lo que quieras compartir" 
+                    onClick={() => { 
+                        if (!loggedUser) 
+                        { alert("Iniciá sesión para publicar"); return; } 
+                        setShowModal(true); }} /> 
+                </div> 
+            </div> 
+        </div>
+    
+
             {featuredPosts.length > 0 && (
             <section className="container mt-4">
                 <h5 className="text-center text-primary mb-3">✨ Publicaciones destacadas</h5>
