@@ -50,32 +50,47 @@ useEffect(() => {
     setCurrentIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
 
   // Crear comentario
+    // Crear comentario
   const handleAddComment = async () => {
-  if (!newComment.trim()) return alert("El comentario no puede estar vacío");
-  if (!post) return;
-  setLoadingComment(true);
+    if (!newComment.trim()) return alert("El comentario no puede estar vacío");
+    if (!post) return;
 
-  try {
-    const newCommentData = await createComment({
-      user: userId,
-      post: post._id,
-      texto: newComment,
-    });
+    setLoadingComment(true);
 
-    // Actualiza tanto el estado local de comments como el post
-    setComments((prev) => [...prev, newCommentData]);
-    setPost((prev) =>
-      prev ? { ...prev, comments: [...prev.comments, newCommentData] } : prev
-    );
+    try {
+      const parsedUser = storedUser ? JSON.parse(storedUser) : null;
 
-    setNewComment("");
-  } catch (error) {
-    console.error("Error al crear el comentario:", error);
-    alert("Error al enviar el comentario");
-  } finally {
-    setLoadingComment(false);
-  }
-};
+      const newCommentData = await createComment({
+        user: userId,
+        post: post._id,
+        texto: newComment,
+      });
+
+      const enrichedComment = {
+        ...newCommentData,
+        user: parsedUser
+          ? {
+              _id: userId,
+              nickname: parsedUser.nickname,
+            }
+          : { nickname: "Usuario desconocido" },
+      };
+
+      // Actualiza tanto el estado local de comments como el post
+      setComments((prev) => [...prev, enrichedComment]);
+      setPost((prev) =>
+        prev ? { ...prev, comments: [...prev.comments, enrichedComment] } : prev
+      );
+
+      setNewComment("");
+    } catch (error) {
+      console.error("Error al crear el comentario:", error);
+      alert("Error al enviar el comentario");
+    } finally {
+      setLoadingComment(false);
+    }
+  };
+
 
 
   if (!post) {

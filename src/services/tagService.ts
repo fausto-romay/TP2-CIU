@@ -7,8 +7,8 @@ export interface Tag {
   nombre: string;
 }
 
-interface CreateTag {
-  nombre: string;
+export interface CreateTag {
+  nombre: string[];
 }
 
 export const getTags = async (): Promise<Tag[]> => {
@@ -21,7 +21,7 @@ export const getTags = async (): Promise<Tag[]> => {
   }
 };
 
-export const createTags = async (tagsData: CreateTag[]) => {
+export const createTags = async (tagsData: { nombre: string }[]) => {
     try {
         const response = await axios.post(`${API_URL}/`, tagsData);
         return response.data;

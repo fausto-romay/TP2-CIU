@@ -75,6 +75,15 @@ function HomePage() {
         );
     };
 
+    const handleNewTags = (tags: string) => {
+        const tagsInArray = tags.trim()
+            .split(",")
+            .filter((t) => t !== "");
+
+        setSelectedTags(tagsInArray);
+    };
+
+
     // ==============================
     // CREAR NUEVO POST
     // ==============================
@@ -106,6 +115,7 @@ function HomePage() {
         if (tagsToCreate.length > 0) {
             createdTags = await createTags(tagsToCreate.map((nombre) => ({ nombre })));
         }
+
 
         const allTags = [
             ...existingTags.filter((t) => selectedTags.includes(t.nombre)),
@@ -232,7 +242,7 @@ function HomePage() {
                         <p className="fs-5 border-bottom p-2">
                             {post.user?.nickname ?? "Usuario eliminado"}:
                         </p>
-                        <p className="text-break">{post.texto}</p>
+                        <p className="text-left p-2">{post.texto}</p>
 
                         {/* Carrusel */}
                         {totalImages > 0 && (
@@ -372,6 +382,11 @@ function HomePage() {
                             #{tag.nombre}
                             </button>
                         ))}
+                        </div>
+
+                        <div className="mt-3">
+                            <p className="fw-semibold mb-1">Añadí tus etiquetas:</p>
+                            <input type="text" className="form-control" placeholder="ej: lindo, tierno ..." onChange={(e) => handleNewTags(e.target.value)}/>
                         </div>
                     </div>
                     </div>
