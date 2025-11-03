@@ -136,14 +136,14 @@ useEffect(() => {
                 <>
                   <button
                     onClick={handlePrev}
-                    className="btn btn-light position-absolute start-0 top-50 translate-middle-y rounded-circle shadow"
+                    className="btn btn btn-outline-light position-absolute start-0 top-50 translate-middle-y rounded-circle shadow"
                     style={{ opacity: 0.8 }}
                   >
                     ❮
                   </button>
                   <button
                     onClick={handleNext}
-                    className="btn btn-light position-absolute end-0 top-50 translate-middle-y rounded-circle shadow"
+                    className="btn btn btn-outline-light position-absolute end-0 top-50 translate-middle-y rounded-circle shadow"
                     style={{ opacity: 0.8 }}
                   >
                     ❯
@@ -164,7 +164,7 @@ useEffect(() => {
 
         <div className="card shadow post-container p-4">
 
-          <div className="input-group mb-3" style={{ maxWidth: "700px" }}>
+          <div className="input-group">
               <input
                 type="text"
                 className="form-control mb-1"

@@ -178,19 +178,19 @@ function HomePage() {
     };
 
     // CONTROL DEL CARRUSEL
-    const handlePrev = (postId: number, total: number) => {
-        setCurrentImageIndex((prev) => ({
-        ...prev,
-        [postId]: prev[postId] && prev[postId] > 0 ? prev[postId] - 1 : total - 1,
-        }));
-    };
+        const handlePrev = (postId: number, total: number) => {
+        setCurrentImageIndex(prev => {
+            const current = prev[postId] ?? 0;
+            return { ...prev, [postId]: (current - 1 + total) % total };
+        });
+        };
 
-    const handleNext = (postId: number, total: number) => {
-        setCurrentImageIndex((prev) => ({
-        ...prev,
-        [postId]: prev[postId] && prev[postId] < total - 1 ? prev[postId] + 1 : 0,
-        }));
-    };
+        const handleNext = (postId: number, total: number) => {
+        setCurrentImageIndex(prev => {
+            const current = prev[postId] ?? 0;
+            return { ...prev, [postId]: (current + 1) % total };
+        });
+        };
 
     // FILTRO POR TAG
     const filteredPosts = activeTag
@@ -386,6 +386,8 @@ function HomePage() {
                 )}
             </div>
             </div>
+            
+            {/* nuevo post */}
 
             {showModal && (
             <div
