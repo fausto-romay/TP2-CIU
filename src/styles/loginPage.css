@@ -1,94 +1,108 @@
 .login-page {
-    background: linear-gradient(135deg, #6eb5ff, #a3d8ff);
-    height: 100vh;
-    width: 100vw; 
-    overflow: hidden;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
+    height: 100vh;
+    background-color: #0f0f17;
+    color: #fff;
+    overflow: hidden;
+      font-family: "Poppins", sans-serif;
+      background-image: url("https://plus.unsplash.com/premium_photo-1752832756705-7c3a97a0a7a3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=387");
+
 }
 
 .login-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 2rem;
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 
 .image-side {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex: 1;
+  background: url("../assets/imagenFondo.png") center center/cover no-repeat;
+  height: 100%;
 }
 
 .login-side-image {
-    width: 90%;
-    max-width: 500px;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    transition: transform 0.4s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8);
 }
 
-.login-side-image:hover {
-    transform: scale(1.03);
-}
 
 .form-side {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .login-card {
-    width: 100%;
-    max-width: 400px;
-    background-color: #ffffff;
-    border-radius: 15px;
-    padding: 2rem;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease-in-out;
+    opacity: 0;
+  transform: translateX(50px);
+  animation: formSlideIn 1s ease-out forwards;
+}
+
+
+@keyframes formSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.login-card:hover{
+      transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(122, 92, 255, 0.3);
 }
 
 .login-logo {
-    width: 140px;
-    margin: 0 auto 1rem;
-    display: block;
-    filter: drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.15));
+  width: 130px;
+  margin-bottom: 1rem;
 }
-
 .form-control {
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 1rem;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    transition: all 0.2s ease;
+  color: #fff;
+  border: 1px solid #7a5cff;
+  border-radius: 10px;
+  padding: 10px;
+  transition: 0.3s;
 }
 
 .form-control:focus {
-    background-color: #fff;
-    border-color: #0095f6;
-    box-shadow: 0 0 4px rgba(0, 149, 246, 0.3);
+  border-color: #7a5cff;
+  box-shadow: 0 0 8px #7a5cff;
 }
 
 .btn-primary {
-    background-color: #0095f6;
-    border: none;
-    font-weight: 600;
-    border-radius: 10px;
-    padding: 10px;
-    transition: background-color 0.2s ease;
+  background-color: #7a5cff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: bold;
+  transition: 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: #0078d4;
+  background-color: #6548ff;
+  transform: scale(1.02);
+}
+
+a {
+  color: #7a5cff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }
 
 .loadingScreen {
@@ -103,37 +117,30 @@
 }
 
 @media (max-width: 768px) {
-    .image-side {
-        display: none !important;
-    }
+  .login-wrapper {
+    flex-direction: column;
+  }
 
-    .login-card {
-        margin-top: -40px;
-    }
+  .image-side {
+    display: none;
+  }
 
-    .login-wrapper {
-        padding: 1rem;
-    }
+  .form-side {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 350px;
+  }
 }
-
 footer {
-    position: fixed;        
-    bottom: 0;
-    left: 0;
-    width: 100%;             
-    text-align: center;
-    padding: 10px 0;
-    background: transparent;  
-    color: #ffffff;     
-    font-size: 0.9rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-footer.solid {
-    background-color: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(4px);
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #888;
 }
 
