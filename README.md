@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# UNAHUR Anti-Social Red:
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## ✨ Descripción del proyecto
 
-Currently, two official plugins are available:
+En este proyecto desarrollamos el Front End de la UNAHUR Anti-Social Red usando la API de nuestro trabajo de la materia "Estrategias de Persistencia", desarrollado con MongoDB y Mongoose junto con Docker y Express.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌐 Tecnologias usadas en este proyecto
 
-## React Compiler
+- React-Vite
+- TypeScript
+- Framework CSS: Bootstrap
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🌱 Instrucciones para correr de forma local:
 
-## Expanding the ESLint configuration
+Una vez descargado este repositorio...
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📄 Descargar el repositorio de nuestra API:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Debemos ingresar y descargar el repositorio del BackEnd haciendo ▶️<a src="https://github.com/EP-UnaHur-2025C2/anti-social-documental-grupo1">Click Aquí</a>◀️
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+‼️IMPORTANTE tener instalado Docker, si no lo tenés, lo podés descargar desde el siguiente link:
+https://docs.docker.com/desktop/setup/install/windows-install/
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 📲 Instalar las dependencias:
+
+Ejecutamos el siguiente comando en la terminal de ambos proyectos:
+
+```
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Una vez finalizado nos dirigimos a la API, abrímos una terminal y ponemos el comando:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+docker-compose up -d
+```
+
+Lo que debería, si no tenemos instaladas las imágenes de MongoDB y Mongoose, poner a descargar las mismas y cuando finalice debe correr el servidor de nuestra BD y hacer aparecer la carpeta "mongo_data" en la raíz del proyecto.
+
+### 🚀 Poner en funcionamiento la pagina:
+
+
+Por último, debemos escribir en la terminal en ambos proyectos el comando:
+
+```
+npm run dev
+```
+
+Para finalmente, tener el proyecto corriendo.
+
+## 😁Desarrolladores😁
+
+- Fausto Romay
+- Maldonado Araceli Carina
+- Lautaro Farias
