@@ -67,7 +67,6 @@ function HomePage() {
         setImageUrls(newImages);
     };
 
-    // 🔹 Reemplazá tu función handleToggleTag por esta versión:
     const handleToggleTag = async (tag: string) => {
         if (!tag) return; // Evita agregar vacío
 

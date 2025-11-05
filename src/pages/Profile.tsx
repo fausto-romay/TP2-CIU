@@ -3,18 +3,10 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import type { User } from "../context/UserContext";
+import type { Post } from "../services/postsService";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-interface Post {
-  _id: string;
-  texto: string;
-  comments?: { texto: string }[];
-}
-
-interface User {
-  _id: string;
-  nickname: string;
-}
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -66,7 +58,12 @@ const Profile = () => {
             <div className="d-flex flex-column align-items-center">
               <div
                 className="rounded-circle bg-primary d-flex justify-content-center align-items-center mb-3"
-                style={{ width: "90px", height: "90px", fontSize: "2rem", color: "white" }}
+                style={{
+                  width: "90px",
+                  height: "90px",
+                  fontSize: "2rem",
+                  color: "white",
+                }}
               >
                 {user.nickname.charAt(0).toUpperCase()}
               </div>
@@ -101,6 +98,26 @@ const Profile = () => {
                       <h5 className="card-title fw-semibold text-dark mb-3">
                         {post.texto || "Sin descripción"}
                       </h5>
+
+                      {/* Mostrar tags */}
+                      {post.tags && post.tags.length > 0 && (
+                        <div className="mb-3">
+                          {post.tags.map((tag) => (
+                            <span
+                              key={tag._id}
+                              className="badge bg-secondary me-2"
+                            >
+                              #{tag.nombre}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                      
+                      {
+                        post.images && post.images?.length > 0 
+                        ? <p className="text-muted small mb-3">Este post contiene imagenes</p>
+                        : <p className="text-muted small mb-3">Este post no contiene imagenes</p>
+                      }
 
                       <p className="text-muted small mb-3">
                         💬 {post.comments?.length || 0} comentarios
