@@ -49,7 +49,6 @@ useEffect(() => {
   const handleNext = () =>
     setCurrentIndex((prev) => (prev === totalImages - 1 ? 0 : prev + 1));
 
-  // Crear comentario
     // Crear comentario
   const handleAddComment = async () => {
     if (!newComment.trim()) return alert("El comentario no puede estar vacío");
