@@ -1,3 +1,13 @@
-main {
-  margin-bottom: 60px; /* altura del footer aprox */
+.textoHome{
+  color: var(--input-color) !important;
+  background-color: var(--card-bg);
+}
+
+textarea, input{
+  background-color: var(--bg-color)!important;
+  color: var(--input-color)!important;
+}
+
+textarea::placeholder, input::placeholder{
+  color: var(--input-color)!important;
 }

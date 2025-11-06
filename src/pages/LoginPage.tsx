@@ -71,6 +71,7 @@ function LoginPage() {
                                         value={nickname}
                                         onChange={(e) => setNickName(e.target.value)}
                                         required
+                                        style={{backgroundColor:"#ffff !important"}}
                                     />
                                 </div>
                                 <div className="mb-3">

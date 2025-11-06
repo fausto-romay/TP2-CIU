@@ -96,19 +96,14 @@ useEffect(() => {
     return (
       <>
         <Header />
-        <div className="d-flex flex-column justify-content-center align-items-center mt-5">
-          <div
-            className="card p-4 text-center opacity-50"
-            style={{ maxWidth: "700px", width: "90%", height: "100rem" }}
-          >
-            <div className="d-flex flex-column justify-content-center align-items-center">
-              <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <p className="fs-5 text-muted mb-0 mt-2">Cargando publicación...</p>
+        <div className="d-flex flex-column justify-content-center align-items-center mt-4">
+            <div className="card p-4 text-center opacity-50" style={{backgroundColor: "var(--card-bg)", maxWidth: "700px", width: "90%", height: "100rem" }}>
+                <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden textoHome" >Loading...</span>
+                </div>
+                <p className="fs-5 text-muted mb-0 textoHome">Cargando..</p>
             </div>
-          </div>
-        </div>
+            </div>
       </>
     );
   }

@@ -9,6 +9,7 @@ function SignupPage() {
     const [mail, setEmail] = useState("");
     const [nickname, setNickName] = useState("");
     const [password, setPassword] = useState("");
+    const id = '';
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
@@ -20,7 +21,7 @@ function SignupPage() {
         setRegistrado("");
 
         try {
-            const newUser = { mail, nickname };
+            const newUser = { mail, nickname, id };
 
             // llamada real al backend
             await registerUser(newUser);

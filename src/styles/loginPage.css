@@ -69,12 +69,21 @@
   margin-bottom: 1rem;
 }
 .form-control {
-  color: #fff;
   border: 1px solid #7a5cff;
   border-radius: 10px;
   padding: 10px;
   transition: 0.3s;
 }
+
+#nickName, #password, #email {
+  background-color: #fff !important;
+  color: #121212 !important;
+}
+
+#nickName::placeholder, #password::placeholder, #email::placeholder {
+  color: #121212 !important;
+}
+
 
 .form-control:focus {
   border-color: #7a5cff;

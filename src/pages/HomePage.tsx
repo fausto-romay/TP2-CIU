@@ -7,6 +7,7 @@ import { getPosts, newPost, type Post } from "../services/postsService";
 import { getTags, createTags, type Tag } from "../services/tagService";
 import { createImage } from "../services/imagesService";
 import type { User } from "../services/userService";
+import "../styles/home.css"
 
 function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);
@@ -202,11 +203,11 @@ function HomePage() {
         <>
             <Header />
             <div className="d-flex flex-column justify-content-center align-items-center mt-4">
-            <div className="card p-4 text-center opacity-50" style={{ maxWidth: "700px", width: "90%", height: "100rem" }}>
+            <div className="card p-4 text-center opacity-50" style={{backgroundColor: "var(--card-bg)", maxWidth: "700px", width: "90%", height: "100rem" }}>
                 <div className="spinner-border text-primary" role="status">
-                <span className="visually-hidden">Loading...</span>
+                <span className="visually-hidden textoHome" >Loading...</span>
                 </div>
-                <p className="fs-5 text-muted mb-0">Cargando..</p>
+                <p className="fs-5 text-muted mb-0 textoHome">Cargando..</p>
             </div>
             </div>
         </>
@@ -222,18 +223,20 @@ function HomePage() {
         <div className="d-flex flex-column justify-content-center align-items-center mt-4">
             <div
                 className="card shadow p-4 w-100"
-                style={{ maxWidth: "700px", width: "90%" }}
-            >
+                style={{ maxWidth: "700px", width: "90%",
+                    backgroundColor: "var(--card-bg)",
+                    color:"var(--text-color)"
+                }}            >
                 <h4 className="card-title mb-3 text-center">
                 ¿Qué estás pensando? ¡Compartilo ahora!
                 </h4>
                 <div className="d-flex justify-content-center align-items-center w-100">
                     <div
                         role="button"
-                        className="form-control p-3 rounded-5 w-100 text-muted"
+                        className="form-control p-3 rounded-5 w-100 text-muted textoHome"
                         style={{
                         cursor: "pointer",
-                        backgroundColor: "#fff",
+                        backgroundColor: "var(--card-bg)",
                         textAlign: "left",
                         }}
                         onClick={() => {
@@ -254,11 +257,12 @@ function HomePage() {
 
             {featuredPosts.length > 0 && (
             <section className="container mt-4">
-                <h5 className="text-center text-primary mb-3">✨ Publicaciones destacadas</h5>
-                <div className="row justify-content-center">
+                <h5 className="text-center  mb-3" style={
+                    {color: "var(--text-color)"}}>✨ Publicaciones destacadas</h5>
+                <div className="row justify-content-center"  style={{backgroundColor:"var(--bg-color)"}}>
                 {featuredPosts.map((post) => (
                     <div key={post._id} className="col-md-4 mb-3">
-                    <div className="card shadow-sm h-100">
+                    <div className="card shadow-sm h-100 textoHome">
                         {post.images?.[0] && (
                         <img
                             src={post.images[0].url}
@@ -267,8 +271,8 @@ function HomePage() {
                             style={{ height: "200px", objectFit: "cover" }}
                         />
                         )}
-                        <div className="card-body">
-                        <h6 className="card-title text-secondary">{post.user?.nickname ?? "Usuario eliminado"}</h6>
+                        <div className="card-body textoHome">
+                        <h6 className="card-title text-secondary" style={{color:"var(--text-color)!important"}}>{post.user?.nickname ?? "Usuario eliminado"}</h6>
                         <p className="card-text small">{post.texto.slice(0, 100)}...</p>
                         <Link to={`/post/${post._id}`} className="btn btn-outline-primary btn-sm">
                             Ver más
@@ -306,7 +310,7 @@ function HomePage() {
                 {filteredPosts.length === 0 ? (
                 <div className="card shadow p-4 text-center">
                     <img src={noPosts} alt="noPostsImg" className="img-fluid mb-3" style={{ maxHeight: "250px", objectFit: "contain" }} />
-                    <p className="fs-5 text-muted mb-0">No hay publicaciones con ese filtro.</p>
+                    <p className="fs-5 text-muted mb-0" style={{color:"var(--text-color)!important"}}>No hay publicaciones con ese filtro.</p>
                 </div>
                 ) : (
                 filteredPosts.map((post) => {
@@ -314,9 +318,9 @@ function HomePage() {
                     const currentIndex = currentImageIndex[post._id] || 0;
 
                     return (
-                    <div key={post._id} className="card mb-3 shadow-sm">
+                    <div key={post._id} className="card mb-3 shadow-sm textoHome">
                         <div className="card-body">
-                        <p className="fs-5 border-bottom p-2">
+                        <p className="fs-5 border-bottom p-2" style={{color:"var(--text-color)!important"}}>
                             {post.user?.nickname ?? "Usuario eliminado"}:
                         </p>
                         <p className="text-left p-2">{post.texto}</p>
@@ -398,9 +402,9 @@ function HomePage() {
                 }}
             >
                 <div className="modal-dialog" style={{ maxWidth: "600px" }}>
-                <div className="modal-content">
+                <div className="modal-content textoHome" >
                     <div className="modal-header">
-                    <h1 className="modal-title fs-5">Crear nueva publicación</h1>
+                    <h1 className="modal-title fs-5" style={{color:"var(--text-color)"}}>Crear nueva publicación</h1>
                     <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                     </div>
                     <div className="modal-body">

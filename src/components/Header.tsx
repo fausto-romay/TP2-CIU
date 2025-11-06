@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { Home, UserRound, LogOut} from "lucide-react";
 import "../styles/header.css"
 import { UserContext } from "../context/UserContext";
+import TemaBoton from "./TemaBoton";
 
 export default function Header() {
     const { user } = useContext(UserContext)
@@ -39,6 +40,8 @@ export default function Header() {
                 {user?.nickname}
                 </i>!</h1>
             <nav className={`nav-icons ${menuOpen ? "open" : ""}`}>
+                <TemaBoton
+                />
                 <Home
                 className="nav-icon"
                 onClick={() => navigate("/home")}

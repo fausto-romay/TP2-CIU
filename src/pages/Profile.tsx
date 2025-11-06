@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import type { User } from "../context/UserContext";
 import type { Post } from "../services/postsService";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/home.css"
 
 
 const Profile = () => {
@@ -53,8 +54,8 @@ const Profile = () => {
 
       <div className="container mt-5 mb-5">
         {/* Tarjeta del perfil */}
-        <div className="card shadow-lg border-0 mb-4">
-          <div className="card-body text-center p-5 bg-light rounded-3">
+        <div className="card shadow-lg mb-4 textoHome">
+          <div className="card-body text-center p-5 rounded-3 textoHome">
             <div className="d-flex flex-column align-items-center">
               <div
                 className="rounded-circle bg-primary d-flex justify-content-center align-items-center mb-3"
@@ -68,7 +69,7 @@ const Profile = () => {
                 {user.nickname.charAt(0).toUpperCase()}
               </div>
               <h2 className="fw-bold text-primary mb-1">{user.nickname}</h2>
-              <p className="text-muted">Bienvenido a tu perfil personal</p>
+              <p className="text-muted" >Bienvenido a tu perfil personal</p>
               <button className="btn btn-outline-danger mt-2" onClick={handleLogout}>
                 <i className="bi bi-box-arrow-right me-2"></i> Cerrar sesión
               </button>
@@ -78,24 +79,24 @@ const Profile = () => {
 
         {/* Lista de publicaciones */}
         <div>
-          <h4 className="mb-4 text-center text-secondary">Tus publicaciones</h4>
+          <h4 className="mb-4 text-center text-secondary" style={{color:"var(--text-color)!important"}}>Tus publicaciones</h4>
 
           {loading ? (
             <div className="text-center mt-5">
               <div className="spinner-border text-primary" role="status"></div>
-              <p className="mt-3 text-muted">Cargando publicaciones...</p>
+              <p className="mt-3 text-muted" style={{color:"var(--text-color)!important"}}>Cargando publicaciones...</p>
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center p-4">
-              <p className="text-muted fs-5">Aún no realizaste publicaciones.</p>
+              <p className="text-muted fs-5" style={{color:"var(--text-color)!important"}}>Aún no realizaste publicaciones.</p>
             </div>
           ) : (
             <div className="row g-4 justify-content-center">
               {posts.map((post) => (
                 <div key={post._id} className="col-md-6 col-lg-4">
                   <div className="card shadow-sm border-0 h-100">
-                    <div className="card-body d-flex flex-column">
-                      <h5 className="card-title fw-semibold text-dark mb-3">
+                    <div className="card-body d-flex flex-column textoHome">
+                      <h5 className="card-title fw-semibold mb-3">
                         {post.texto || "Sin descripción"}
                       </h5>
 
