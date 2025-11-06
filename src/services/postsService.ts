@@ -18,8 +18,8 @@ export interface Image {
 export interface CreatePost {
   user: User;
   texto: string;
-  images?: Image[]; // <-- opcional
-  tags?: Tag[];  // <-- opcional
+  images?: Image[]; 
+  tags?: Tag[]; 
 }
 
 

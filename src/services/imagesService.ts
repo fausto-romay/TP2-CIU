@@ -8,7 +8,7 @@ export interface NewImage {
 
 export const createImage = async (images: NewImage[]) => {
     try {
-        // 👇 el back acepta arrays, así que mandamos directamente el array de objetos { url }
+        // el back acepta arrays, así que mandamos directamente el array de objetos { url }
         const response = await axios.post(`${API_URL}/`, images);
         return response.data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

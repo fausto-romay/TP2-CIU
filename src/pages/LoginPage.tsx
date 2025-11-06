@@ -21,7 +21,7 @@ function LoginPage() {
         setLoading(true);
 
         try {
-            // ⚠️ Contraseña simple temporal (solo para pruebas)
+            // Contraseña simple temporal (solo para pruebas)
             if (password !== "12345") {
                 setLoading(false);
                 return setError("Contraseña incorrecta");

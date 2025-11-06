@@ -53,7 +53,6 @@ const Profile = () => {
       <Header />
 
       <div className="container mt-5 mb-5">
-        {/* Tarjeta del perfil */}
         <div className="card shadow-lg mb-4 textoHome">
           <div className="card-body text-center p-5 rounded-3 textoHome">
             <div className="d-flex flex-column align-items-center">
@@ -77,7 +76,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Lista de publicaciones */}
         <div>
           <h4 className="mb-4 text-center text-secondary" style={{color:"var(--text-color)!important"}}>Tus publicaciones</h4>
 
@@ -100,7 +98,6 @@ const Profile = () => {
                         {post.texto || "Sin descripción"}
                       </h5>
 
-                      {/* Mostrar tags */}
                       {post.tags && post.tags.length > 0 && (
                         <div className="mb-3">
                           {post.tags.map((tag) => (

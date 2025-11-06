@@ -8,7 +8,7 @@ export interface User {
     nickname: string;
 }
 
-// 🔹 Registrar usuario
+// Registrar usuario
 export const registerUser = async (userData: Omit<User, "_id">) => {
     try {
         const response = await axios.post(API_URL, userData);
@@ -25,7 +25,7 @@ export const registerUser = async (userData: Omit<User, "_id">) => {
     }
 };
 
-// 🔹 Login: busca usuario por nickname
+// Login: busca usuario por nickname
 export const loginUser = async (nickname: string) => {
     try {
         const response = await axios.get<User>(`${API_URL}/${encodeURIComponent(nickname)}`);
@@ -42,7 +42,7 @@ export const loginUser = async (nickname: string) => {
     }
 };
 
-// 🔹 Obtener todos los usuarios
+// Obtener todos los usuarios
 export const getUsers = async (): Promise<User[]> => {
     try {
         const response = await axios.get<User[]>(API_URL);
