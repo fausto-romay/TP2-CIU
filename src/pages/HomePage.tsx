@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -6,13 +6,15 @@ import noPosts from "../assets/noPostsBored.png";
 import { getPosts, newPost, type Post } from "../services/postsService";
 import { getTags, createTags, type Tag } from "../services/tagService";
 import { createImage } from "../services/imagesService";
-import type { User } from "../services/userService";
 import "../styles/home.css"
+import { UserContext } from "../context/UserContext";
 
 function HomePage() {
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+
+    const { user: loggedUser } = useContext(UserContext);
 
     // Campos del nuevo post
     const [description, setDescription] = useState("");
@@ -31,13 +33,8 @@ function HomePage() {
     // Control del carrusel
     const [currentImageIndex, setCurrentImageIndex] = useState<{ [key: string]: number }>({});
 
-    // Usuario logueado
-    const [loggedUser, setLoggedUser] = useState<User | null>(null);
-
     // CARGAR POSTS, TAGS Y USUARIO
     useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) setLoggedUser(JSON.parse(storedUser));
 
         const fetchData = async () => {
         try {

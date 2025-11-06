@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 import axios from "axios";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import type { User } from "../context/UserContext";
 import type { Post } from "../services/postsService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../styles/home.css"
@@ -11,25 +11,22 @@ import "../styles/home.css"
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<User | null>(null);
+  const { user, initialized, setUser } = useContext(UserContext);
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   const API_URL = "http://localhost:3000";
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
-      navigate("/login");
+    useEffect(() => {
+    if (!initialized) return; // Esperar el contexto
+    if (!user) {
+      navigate("/");
       return;
     }
 
-    const parsedUser = JSON.parse(storedUser);
-    setUser(parsedUser);
-
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${API_URL}/post/user/${parsedUser._id}`);
+        const response = await axios.get(`${API_URL}/post/user/${user.id}`);
         setPosts(response.data || []);
       } catch (error) {
         console.error("Error al obtener publicaciones:", error);
@@ -39,14 +36,14 @@ const Profile = () => {
     };
 
     fetchPosts();
-  }, [navigate]);
+  }, [initialized, user, navigate]);
 
+  if (!initialized || !user) return null;
   const handleLogout = () => {
+    setUser(null);
     localStorage.removeItem("user");
-    navigate("/login");
+    navigate("/");
   };
-
-  if (!user) return null;
 
   return (
     <>

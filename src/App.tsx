@@ -20,7 +20,11 @@ function App() {
           }
           />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={
+          <ProtectorRuta>
+          <Profile />
+          </ProtectorRuta>
+          } />
         <Route path="/post/:id" element={<PostDetailed />} />
       </Routes>
     </Router>
