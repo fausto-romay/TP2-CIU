@@ -3,13 +3,12 @@ import axios from "axios";
 const API_URL = "http://localhost:3000/user";
 
 export interface User {
-    id: string;
     mail: string;
     nickname: string;
 }
 
 // Registrar usuario
-export const registerUser = async (userData: Omit<User, "_id">) => {
+export const registerUser = async (userData:User) => {
     try {
         const response = await axios.post(API_URL, userData);
         return response.data;
@@ -28,7 +27,7 @@ export const registerUser = async (userData: Omit<User, "_id">) => {
 // Login: busca usuario por nickname
 export const loginUser = async (nickname: string) => {
     try {
-        const response = await axios.get<User>(`${API_URL}/${encodeURIComponent(nickname)}`);
+        const response = await axios.get<User>(`${API_URL}/login/${encodeURIComponent(nickname)}`);
         return response.data;
     } catch (error: unknown) {
         console.error("Error al iniciar sesión:", error);
