@@ -26,7 +26,7 @@ const Profile = () => {
 
     const fetchPosts = async () => {
       try {
-        const response = await axios.get(`${API_URL}/post/user/${user.id}`);
+        const response = await axios.get(`${API_URL}/post/user/${user._id}`);
         setPosts(response.data || []);
       } catch (error) {
         console.error("Error al obtener publicaciones:", error);

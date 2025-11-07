@@ -2,13 +2,19 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3000/user";
 
+export interface createUser {
+    mail: string;
+    nickname: string;
+}
+
 export interface User {
+    _id: string;
     mail: string;
     nickname: string;
 }
 
 // Registrar usuario
-export const registerUser = async (userData:User) => {
+export const registerUser = async (userData:createUser) => {
     try {
         const response = await axios.post(API_URL, userData);
         return response.data;
